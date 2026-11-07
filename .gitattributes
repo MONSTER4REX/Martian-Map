@@ -1,0 +1,9 @@
+# Normalize line endings: LF in the repo, so Windows and Linux CI agree.
+* text=auto eol=lf
+
+# Binary-ish data (should be gitignored anyway; belt and suspenders).
+*.tif binary
+*.tiff binary
+*.cog binary
+*.img binary
+*.jp2 binary
