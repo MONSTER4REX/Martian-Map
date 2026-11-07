@@ -1,0 +1,92 @@
+# Marswalk Planner
+
+Layered, uncertainty-aware **EVA route planning** for a Martian AOI. Our team's
+entry for the **2026 NASA Space Apps Challenge**, "Interplanetary Survival
+Guide: Martian Map" (hackathon Nov 14–15, 2026).
+
+> **Core claim to prove:** on a real Jezero site, the full mission-constrained
+> route differs from the shortest and slope-only routes for defensible,
+> explainable reasons, with assumptions and uncertainty shown.
+
+Spec and decisions: [`MARSWALK_CONTEXT.md`](MARSWALK_CONTEXT.md) (source of
+truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
+
+## Status (2026-11-08)
+
+| Area | State |
+|---|---|
+| Repo skeleton, CI, licenses | ✅ in place |
+| **P3 planner baseline** (grid, A*, slope, 3-route comparison) | ✅ offline, 92 tests pass; **UNTESTED ON REAL DATA** |
+| A* validated vs independent oracle (NetworkX) | ✅ randomized suite |
+| P1 data / P2 ML / P4 physics / P5 frontend / P6 validation | ⏳ not started |
+
+Nothing network- or GPU-dependent is "done" until an owner runs it on their
+machine and pastes back results (the sandbox has no AWS/PDS/ODE/Zenodo access
+and no GPU).
+
+### Assumptions baked in (the three blocking questions, defaults taken)
+
+1. **No pre-existing repo** — this is the starting skeleton.
+2. **Event rules UNCONFIRMED** — pre-event-work and AI-use/disclosure rules not
+   yet checked against the 2026 Participant Terms. Until confirmed, all code is
+   prep, AI authorship is logged in [`AI_LOG.md`](AI_LOG.md), and AI use will be
+   disclosed. (Lead to confirm.)
+3. **AOI = Jezero**, roles/machines per `MARSWALK_CONTEXT.md` §3–4, not yet
+   re-confirmed by a coverage audit.
+
+## Quickstart
+
+```bash
+python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+pre-commit install
+pytest            # 92 tests, offline, ~2 s
+ruff check .
+```
+
+Three-route demo:
+
+```python
+from marswalk.terrain.synthetic import ridge_world
+from marswalk.planner.routes import compare_routes
+
+grid = ridge_world(40, 40, cellsize=2.0, ridge_height_m=2.0,
+                   ridge_half_width=1, gap_col=20)
+cmp = compare_routes(grid, start=(0, 0), goal=(39, 0))
+print(cmp.summary)
+# -> Shortest route is NOT mission-feasible (2 hard-exclusion edge(s)); the
+#    mission route detours around them. Mission route is +37.4% vs shortest.
+```
+
+## Layout
+
+```
+src/marswalk/
+  planner/      grid, connectivity, slope, cost, astar, layers, routes
+  terrain/      synthetic terrain for offline tests/demos
+tests/          grid, slope, routes, A*-vs-NetworkX oracle
+docs/           planner.md (module README)
+data/           gitignored — never commit rasters (DVC / external SSD)
+```
+
+Module docs: [`docs/planner.md`](docs/planner.md).
+Data provenance & licenses: [`DATA_LICENSES.md`](DATA_LICENSES.md).
+
+## Build order (from the spec)
+
+Planner first, validated at each step, **before** any ML:
+1. ✅ 3-D shortest path (checked vs independent impl)
+2. ✅ slope-aware cost
+3. ✅ hard exclusions (slope, cross-slope, unknown=blocked)
+4. ⏳ mission constraints + walk-back (P4) — **gate for multi-objective search**
+5. ⏳ multi-objective NAMOA* on a corridor
+6. ⏳ time-windowed orienteering
+
+ML (rock detector) only after the baseline planner passes and an ablation shows
+it changes route decisions (`MARSWALK_CONTEXT.md` §3 gates).
+
+## License
+
+Code: MIT ([`LICENSE`](LICENSE)). Input datasets keep their own terms and are
+not redistributed — see [`DATA_LICENSES.md`](DATA_LICENSES.md) (HRSC is CC BY-SA;
+MCD is non-commercial; AI4Mars license unspecified).
