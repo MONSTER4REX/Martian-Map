@@ -32,6 +32,26 @@ Flags (for inspection, **no elevations are modified**):
 Thresholds are placeholders; tune per DTM. Flags feed the DEM error model (C2)
 and the unknown mask — they are the §6 Mars-DTM pitfalls made measurable.
 
+## Manifest (`data/manifest.py`)
+
+`Manifest` / `LayerRecord` (pydantic, JSON round-trip): each layer records its
+`kind` (hard/objective/informational), product type, source URL, CRS, **native
+and effective resolution**, units, **license + verify status**, and uncertainty.
+Rejects an effective resolution finer than native (no upsampling coarse data
+into false detail). Helpers: `by_kind`, `unverified()`, `coarser_than(res_m)`
+(flags non-EVA-scale layers). License obligations live in `DATA_LICENSES.md`.
+
+## COG window reader (`data/io.py`) — UNTESTED ON REAL DATA
+
+- `bounds_to_window(transform, bounds)` — pure pixel-window math for a north-up
+  transform (tested offline).
+- `array_to_grid(array, cellsize, nodata)` — wrap a window as a `Grid`
+  (nodata → NaN).
+- `read_cog_window(path, window|bounds, band, anonymous)` — windowed COG read
+  via rasterio (`/vsis3/` or https; `AWS_NO_SIGN_REQUEST` for AWS Open Data).
+  **Requires rasterio and network; UNTESTED here** — an owner must run it and
+  paste back results. Raises an actionable error if rasterio is missing.
+
 ## DEM error ensembles (`data/error_model.py`, C2)
 
 Spatially-correlated DEM error for route-stability (P6).

@@ -14,6 +14,8 @@ from marswalk.data.error_model import (
     perturbed_grid,
     sample_error,
 )
+from marswalk.data.io import WindowSpec, array_to_grid, bounds_to_window, read_cog_window
+from marswalk.data.manifest import LayerRecord, Manifest, VerifyStatus
 from marswalk.data.qa import DTMQAReport, run_dtm_qa
 
 __all__ = [
@@ -29,4 +31,11 @@ __all__ = [
     "ensemble",
     "empirical_variogram",
     "fit_exponential_variogram",
+    "Manifest",
+    "LayerRecord",
+    "VerifyStatus",
+    "WindowSpec",
+    "bounds_to_window",
+    "array_to_grid",
+    "read_cog_window",
 ]

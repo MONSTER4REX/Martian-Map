@@ -26,6 +26,7 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | P1 `data/derivatives.py` (slope/aspect/hillshade/curvature) + `data/qa.py` (C1 DTM QA) + tests + docs/data.md | _pending (P1)_ | Offline on synthetic DEMs. |
 | 2026-11-08 | Claude (Opus 4.8) | P1 `data/error_model.py` (C2 correlated-noise ensembles, empirical variogram, exponential fit) + tests | _pending (P1/P6)_ | Offline. Fit params must come from real residuals. |
 | 2026-11-08 | Claude (Opus 4.8) | P6 `validation/` metrics (jaccard, 3-D length, hazard, discrete Fréchet), route stability, ablation harness + tests + docs/validation.md | _pending (P6)_ | Offline on synthetic terrain + DEM ensembles. |
+| 2026-11-08 | Claude (Opus 4.8) | P1 `data/manifest.py` (STAC-ish layer records + license/res/uncertainty) + `data/io.py` (COG window reader, rasterio-guarded) + tests | _pending (P1)_ | Manifest tested offline; COG read UNTESTED ON REAL DATA. |
 
 ## How to keep this honest
 
