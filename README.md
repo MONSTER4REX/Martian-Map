@@ -16,9 +16,11 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | Area | State |
 |---|---|
 | Repo skeleton, CI, licenses | ✅ in place |
-| **P3 planner baseline** (grid, A*, slope, 3-route comparison) | ✅ offline, 92 tests pass; **UNTESTED ON REAL DATA** |
+| **P3 planner baseline** (grid, A*, slope, 3-route comparison) | ✅ offline; **UNTESTED ON REAL DATA** |
 | A* validated vs independent oracle (NetworkX) | ✅ randomized suite |
-| P1 data / P2 ML / P4 physics / P5 frontend / P6 validation | ⏳ not started |
+| **P4 EVA physics** (locomotion, consumables, **walk-back** gate) | ✅ offline, placeholder params; **UNTESTED ON REAL DATA** |
+| Whole suite | ✅ 106 tests pass (~2 s, offline) |
+| P1 data / P2 ML / P5 frontend / P6 validation | ⏳ not started |
 
 Nothing network- or GPU-dependent is "done" until an owner runs it on their
 machine and pastes back results (the sandbox has no AWS/PDS/ODE/Zenodo access
@@ -40,7 +42,7 @@ and no GPU).
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 92 tests, offline, ~2 s
+pytest            # 106 tests, offline, ~2 s
 ruff check .
 ```
 
@@ -78,7 +80,9 @@ Planner first, validated at each step, **before** any ML:
 1. ✅ 3-D shortest path (checked vs independent impl)
 2. ✅ slope-aware cost
 3. ✅ hard exclusions (slope, cross-slope, unknown=blocked)
-4. ⏳ mission constraints + walk-back (P4) — **gate for multi-objective search**
+4. 🔶 mission constraints + walk-back (P4) — walk-back/consumables primitives
+   done & tested ([docs/physics.md](docs/physics.md)); **next: wire walk-back
+   into the planner as a hard constraint.** This is the gate for step 5.
 5. ⏳ multi-objective NAMOA* on a corridor
 6. ⏳ time-windowed orienteering
 
