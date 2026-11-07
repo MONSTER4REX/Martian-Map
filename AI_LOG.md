@@ -28,6 +28,7 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | P6 `validation/` metrics (jaccard, 3-D length, hazard, discrete Fréchet), route stability, ablation harness + tests + docs/validation.md | _pending (P6)_ | Offline on synthetic terrain + DEM ensembles. |
 | 2026-11-08 | Claude (Opus 4.8) | P1 `data/manifest.py` (STAC-ish layer records + license/res/uncertainty) + `data/io.py` (COG window reader, rasterio-guarded) + tests | _pending (P1)_ | Manifest tested offline; COG read UNTESTED ON REAL DATA. |
 | 2026-11-08 | Claude (Opus 4.8) | C8 `geometry/` (LOS visibility, illumination, comms coverage) + synthetic ephemeris + guarded `spice.py` + tests + docs/geometry.md | _pending (P1)_ | Geometry tested offline; real SPICE UNTESTED ON REAL DATA. |
+| 2026-11-08 | Claude (Opus 4.8) | C7 `science/size_frequency.py` (exponential SFD fit) + C9 `science/value_raster.py` (weighted value raster + top_targets) + tests + docs/science.md | _pending (P2/P6)_ | Offline, input-agnostic. Golombek-Rapp CFA calibration still owed. |
 
 ## How to keep this honest
 
