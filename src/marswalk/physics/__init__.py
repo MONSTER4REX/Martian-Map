@@ -22,6 +22,9 @@ from marswalk.physics.locomotion import (
     edge_time_s,
     speed_ms,
 )
+from marswalk.physics.radiation import RadiationScreen
+from marswalk.physics.slip import SlipParams, slip_proxy
+from marswalk.physics.thermal import ThermalParams, surface_temp_range_k
 from marswalk.physics.walkback import (
     WalkbackReport,
     WalkbackScenario,
@@ -45,4 +48,9 @@ __all__ = [
     "time_to_haven_field",
     "check_walkback",
     "standard_scenarios",
+    "ThermalParams",
+    "surface_temp_range_k",
+    "RadiationScreen",
+    "SlipParams",
+    "slip_proxy",
 ]

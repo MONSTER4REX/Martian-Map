@@ -28,8 +28,9 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **C7/C9 science** — rock size-frequency + value raster | ✅ offline |
 | **P2 ML** — annotation, spatial splits, detection metrics | ✅ offline; training pending (GPU) |
 | **P3/P5 API + web** — FastAPI (/routes /probe) + React map | ✅ offline; verified in-browser |
-| Whole suite | ✅ 180 tests pass (~8 s, offline) |
-| Remaining | ⏳ C3 thermal / C4 radiation / C6 slip; real-data/GPU runs on owner machines |
+| **C3/C4/C6 screening** — thermal / radiation / slip (placeholders) | ✅ offline; validate vs MEDA / rover cases |
+| Whole suite | ✅ 186 tests pass (~7 s, offline) |
+| Remaining | ⏳ real-data / GPU runs on owner machines; model validation |
 
 Nothing network- or GPU-dependent is "done" until an owner runs it on their
 machine and pastes back results (the sandbox has no AWS/PDS/ODE/Zenodo access
@@ -51,7 +52,7 @@ and no GPU).
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 180 tests, offline, ~8 s
+pytest            # 186 tests, offline, ~7 s
 ruff check .
 ```
 
