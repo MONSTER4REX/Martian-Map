@@ -21,7 +21,8 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **P4 EVA physics** (locomotion, consumables, **walk-back** gate) | ✅ offline, placeholder params; **UNTESTED ON REAL DATA** |
 | **Walk-back wired into planner** (mission constraint, step 4) | ✅ offline; gate satisfied → step 5 unlocked |
 | **Step 5: multi-objective NAMOA\*** (Pareto on a corridor) | ✅ offline; exact front, validated vs Dijkstra |
-| Whole suite | ✅ 120 tests pass (~4 s, offline) |
+| **Step 6: time-windowed orienteering** (science under walk-back) | ✅ offline; exact subset DP |
+| Whole suite | ✅ 126 tests pass (~4 s, offline) |
 | P1 data / P2 ML / P5 frontend / P6 validation | ⏳ not started |
 
 Nothing network- or GPU-dependent is "done" until an owner runs it on their
@@ -44,7 +45,7 @@ and no GPU).
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 120 tests, offline, ~4 s
+pytest            # 126 tests, offline, ~4 s
 ruff check .
 ```
 
@@ -86,7 +87,11 @@ Planner first, validated at each step, **before** any ML:
    constraint ([docs/physics.md](docs/physics.md), [docs/mission.md](docs/mission.md)).
    Gate satisfied.
 5. ✅ multi-objective NAMOA* on a corridor ([docs/multiobjective.md](docs/multiobjective.md))
-6. ⏳ time-windowed orienteering
+6. ✅ time-windowed orienteering ([docs/orienteering.md](docs/orienteering.md))
+
+The planner build order (steps 1–6) is complete offline; remaining work is the
+data layer (P1), validation (P6), geometry/science rasters, ML, and the API +
+frontend.
 
 ML (rock detector) only after the baseline planner passes and an ablation shows
 it changes route decisions (`MARSWALK_CONTEXT.md` §3 gates).
