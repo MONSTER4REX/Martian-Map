@@ -23,6 +23,7 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | Multi-objective tests (dominance, non-dominated front, per-objective extremes vs Dijkstra, corridor) | _pending (P3/P6)_ | Runs offline on synthetic fixtures. |
 | 2026-11-08 | Claude (Opus 4.8) | `planner/orienteering.py`: time-windowed orienteering (exact Held-Karp subset DP) under walk-back; docs/orienteering.md | _pending (P3)_ | Offline. |
 | 2026-11-08 | Claude (Opus 4.8) | Orienteering tests (budget subset, time window, walk-back/unreachable exclusion, determinism) | _pending (P3/P6)_ | Runs offline on synthetic fixtures. |
+| 2026-11-08 | Claude (Opus 4.8) | P1 `data/derivatives.py` (slope/aspect/hillshade/curvature) + `data/qa.py` (C1 DTM QA) + tests + docs/data.md | _pending (P1)_ | Offline on synthetic DEMs. |
 
 ## How to keep this honest
 
