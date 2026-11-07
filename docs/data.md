@@ -31,3 +31,24 @@ Flags (for inspection, **no elevations are modified**):
 
 Thresholds are placeholders; tune per DTM. Flags feed the DEM error model (C2)
 and the unknown mask — they are the §6 Mars-DTM pitfalls made measurable.
+
+## DEM error ensembles (`data/error_model.py`, C2)
+
+Spatially-correlated DEM error for route-stability (P6).
+
+- `DEMErrorModel(sill_m2, range_m, nugget_m2)` — variance, correlation length,
+  white component.
+- `sample_error` / `perturbed_grid` / `ensemble(grid, model, n, seed)` —
+  reproducible correlated error realizations; NaN cells stay NaN.
+- `empirical_variogram(grid, …)` → `(lags_m, gamma)` isotropic semivariogram.
+- `fit_exponential_variogram(lags, gamma)` → `DEMErrorModel` (grid-search range +
+  non-negative LS for sill/nugget; no scipy).
+
+Implementation note: the correlated field is a Gaussian random field (FFT
+convolution of white noise with a Gaussian kernel), so its covariance is
+approximately Gaussian, not a pure exponential variogram — fine for perturbation
+ensembles. Owners fit `sill_m2`/`range_m` to **real** residuals (controlled-vs-
+uncontrolled offsets, overlap differences) before trusting stability numbers.
+Validated offline: sample variance ≈ sill; error decorrelates with distance;
+ensembles reproducible and nodata-preserving; variogram rises then plateaus; the
+fitter recovers exponential parameters on exponential data.

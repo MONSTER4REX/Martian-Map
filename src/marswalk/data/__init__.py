@@ -6,6 +6,14 @@ unknown, never silently filled.
 """
 
 from marswalk.data.derivatives import aspect_degrees, curvature, hillshade, slope_degrees
+from marswalk.data.error_model import (
+    DEMErrorModel,
+    empirical_variogram,
+    ensemble,
+    fit_exponential_variogram,
+    perturbed_grid,
+    sample_error,
+)
 from marswalk.data.qa import DTMQAReport, run_dtm_qa
 
 __all__ = [
@@ -15,4 +23,10 @@ __all__ = [
     "curvature",
     "DTMQAReport",
     "run_dtm_qa",
+    "DEMErrorModel",
+    "sample_error",
+    "perturbed_grid",
+    "ensemble",
+    "empirical_variogram",
+    "fit_exponential_variogram",
 ]

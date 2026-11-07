@@ -24,6 +24,7 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | `planner/orienteering.py`: time-windowed orienteering (exact Held-Karp subset DP) under walk-back; docs/orienteering.md | _pending (P3)_ | Offline. |
 | 2026-11-08 | Claude (Opus 4.8) | Orienteering tests (budget subset, time window, walk-back/unreachable exclusion, determinism) | _pending (P3/P6)_ | Runs offline on synthetic fixtures. |
 | 2026-11-08 | Claude (Opus 4.8) | P1 `data/derivatives.py` (slope/aspect/hillshade/curvature) + `data/qa.py` (C1 DTM QA) + tests + docs/data.md | _pending (P1)_ | Offline on synthetic DEMs. |
+| 2026-11-08 | Claude (Opus 4.8) | P1 `data/error_model.py` (C2 correlated-noise ensembles, empirical variogram, exponential fit) + tests | _pending (P1/P6)_ | Offline. Fit params must come from real residuals. |
 
 ## How to keep this honest
 
