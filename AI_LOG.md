@@ -30,6 +30,7 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | C8 `geometry/` (LOS visibility, illumination, comms coverage) + synthetic ephemeris + guarded `spice.py` + tests + docs/geometry.md | _pending (P1)_ | Geometry tested offline; real SPICE UNTESTED ON REAL DATA. |
 | 2026-11-08 | Claude (Opus 4.8) | C7 `science/size_frequency.py` (exponential SFD fit) + C9 `science/value_raster.py` (weighted value raster + top_targets) + tests + docs/science.md | _pending (P2/P6)_ | Offline, input-agnostic. Golombek-Rapp CFA calibration still owed. |
 | 2026-11-08 | Claude (Opus 4.8) | P2 `ml/` annotation schema + spatial splits + detection metrics (F1 by size bin) + guarded `train.py` + scripts/train_rock_detector.py + tests + docs/ml.md | _pending (P2)_ | Schema/splits/metrics tested offline; training UNTESTED ON REAL DATA (needs torch+GPU). |
+| 2026-11-08 | Claude (Opus 4.8) | P3/P5 `api/` (pure service + FastAPI /routes /probe /health + OpenAPI) + `web/index.html` (React map, probe) + export script + tests + docs/api.md | _pending (P3/P5)_ | Tested offline incl. FastAPI TestClient; verified rendering in-browser. |
 
 ## How to keep this honest
 

@@ -1,0 +1,637 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Marswalk Planner API",
+    "description": "EVA route planning: three-route comparison and a probe tool.",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Health Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes": {
+      "post": {
+        "summary": "Routes",
+        "operationId": "routes_routes_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteComparison"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/probe": {
+      "post": {
+        "summary": "Probe Endpoint",
+        "operationId": "probe_endpoint_probe_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProbeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProbeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "PlannerConfig": {
+        "properties": {
+          "connectivity": {
+            "type": "integer",
+            "title": "Connectivity",
+            "default": 8
+          },
+          "max_slope_deg": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Max Slope Deg",
+            "default": 25.0
+          },
+          "max_cross_slope_deg": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Max Cross Slope Deg",
+            "default": 20.0
+          },
+          "slope_alpha": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Slope Alpha",
+            "default": 1.0
+          }
+        },
+        "type": "object",
+        "title": "PlannerConfig",
+        "description": "Thresholds and policy knobs. Defaults are PLACEHOLDERS (see ASSUMPTIONS)."
+      },
+      "ProbeRequest": {
+        "properties": {
+          "terrain": {
+            "$ref": "#/components/schemas/TerrainSpec",
+            "default": {
+              "kind": "ridge",
+              "nrows": 40,
+              "ncols": 40,
+              "cellsize": 2.0,
+              "ridge_height_m": 2.0,
+              "ridge_half_width": 1,
+              "seed": 0,
+              "relief_m": 8.0,
+              "passes": 8
+            }
+          },
+          "cell": {
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Cell"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cell"
+        ],
+        "title": "ProbeRequest"
+      },
+      "ProbeResponse": {
+        "properties": {
+          "cell": {
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Cell"
+          },
+          "in_bounds": {
+            "type": "boolean",
+            "title": "In Bounds"
+          },
+          "known": {
+            "type": "boolean",
+            "title": "Known"
+          },
+          "elevation_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevation M"
+          },
+          "slope_deg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slope Deg"
+          },
+          "aspect_deg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aspect Deg"
+          },
+          "hillshade": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hillshade"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cell",
+          "in_bounds",
+          "known",
+          "elevation_m",
+          "slope_deg",
+          "aspect_deg",
+          "hillshade"
+        ],
+        "title": "ProbeResponse"
+      },
+      "RouteComparison": {
+        "properties": {
+          "start": {
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Start"
+          },
+          "goal": {
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Goal"
+          },
+          "config": {
+            "$ref": "#/components/schemas/PlannerConfig"
+          },
+          "routes": {
+            "items": {
+              "$ref": "#/components/schemas/RouteResult"
+            },
+            "type": "array",
+            "title": "Routes"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "goal",
+          "config",
+          "routes",
+          "summary"
+        ],
+        "title": "RouteComparison"
+      },
+      "RouteMetrics": {
+        "properties": {
+          "total_cost": {
+            "type": "number",
+            "title": "Total Cost"
+          },
+          "length_3d_m": {
+            "type": "number",
+            "title": "Length 3D M"
+          },
+          "n_cells": {
+            "type": "integer",
+            "title": "N Cells"
+          },
+          "max_along_slope_deg": {
+            "type": "number",
+            "title": "Max Along Slope Deg"
+          },
+          "mean_along_slope_deg": {
+            "type": "number",
+            "title": "Mean Along Slope Deg"
+          },
+          "max_cross_slope_deg": {
+            "type": "number",
+            "title": "Max Cross Slope Deg"
+          },
+          "n_cross_slope_undefined": {
+            "type": "integer",
+            "title": "N Cross Slope Undefined"
+          },
+          "n_hard_violations": {
+            "type": "integer",
+            "title": "N Hard Violations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_cost",
+          "length_3d_m",
+          "n_cells",
+          "max_along_slope_deg",
+          "mean_along_slope_deg",
+          "max_cross_slope_deg",
+          "n_cross_slope_undefined",
+          "n_hard_violations"
+        ],
+        "title": "RouteMetrics"
+      },
+      "RouteRequest": {
+        "properties": {
+          "terrain": {
+            "$ref": "#/components/schemas/TerrainSpec",
+            "default": {
+              "kind": "ridge",
+              "nrows": 40,
+              "ncols": 40,
+              "cellsize": 2.0,
+              "ridge_height_m": 2.0,
+              "ridge_half_width": 1,
+              "seed": 0,
+              "relief_m": 8.0,
+              "passes": 8
+            }
+          },
+          "start": {
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Start"
+          },
+          "goal": {
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Goal"
+          },
+          "config": {
+            "$ref": "#/components/schemas/PlannerConfig",
+            "default": {
+              "connectivity": 8,
+              "max_slope_deg": 25.0,
+              "max_cross_slope_deg": 20.0,
+              "slope_alpha": 1.0
+            }
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "goal"
+        ],
+        "title": "RouteRequest"
+      },
+      "RouteResult": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "policy": {
+            "type": "string",
+            "title": "Policy"
+          },
+          "feasible": {
+            "type": "boolean",
+            "title": "Feasible"
+          },
+          "mission_feasible": {
+            "type": "boolean",
+            "title": "Mission Feasible"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "path": {
+            "anyOf": [
+              {
+                "items": {
+                  "prefixItems": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ],
+                  "type": "array",
+                  "maxItems": 2,
+                  "minItems": 2
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Path"
+          },
+          "metrics": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RouteMetrics"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "policy",
+          "feasible",
+          "mission_feasible",
+          "reason",
+          "path",
+          "metrics"
+        ],
+        "title": "RouteResult"
+      },
+      "TerrainSpec": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ridge",
+              "random",
+              "inline"
+            ],
+            "title": "Kind",
+            "default": "ridge"
+          },
+          "nrows": {
+            "type": "integer",
+            "title": "Nrows",
+            "default": 40
+          },
+          "ncols": {
+            "type": "integer",
+            "title": "Ncols",
+            "default": 40
+          },
+          "cellsize": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Cellsize",
+            "default": 2.0
+          },
+          "ridge_height_m": {
+            "type": "number",
+            "title": "Ridge Height M",
+            "default": 2.0
+          },
+          "ridge_half_width": {
+            "type": "integer",
+            "title": "Ridge Half Width",
+            "default": 1
+          },
+          "gap_col": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gap Col"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 0
+          },
+          "relief_m": {
+            "type": "number",
+            "title": "Relief M",
+            "default": 8.0
+          },
+          "passes": {
+            "type": "integer",
+            "title": "Passes",
+            "default": 8
+          },
+          "elevation": {
+            "anyOf": [
+              {
+                "items": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "type": "array"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevation"
+          }
+        },
+        "type": "object",
+        "title": "TerrainSpec",
+        "description": "How the server obtains the DEM. Demo/synthetic only in this build."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

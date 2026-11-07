@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Marswalk Planner — three-route comparison</title>
+<style>
+  :root { color-scheme: light dark; --bg:#111; --fg:#eee; --muted:#9aa; }
+  body { margin:0; font:14px/1.5 system-ui, sans-serif; background:#0d0f12; color:#e8eaed; }
+  header { padding:14px 18px; border-bottom:1px solid #222; }
+  h1 { font-size:18px; margin:0 0 2px; }
+  .sub { color:#9aa; font-size:12px; }
+  main { display:flex; flex-wrap:wrap; gap:18px; padding:16px 18px; }
+  canvas { background:#000; border:1px solid #333; image-rendering:pixelated; touch-action:none; }
+  .panel { min-width:300px; flex:1; }
+  .legend span { display:inline-block; width:12px; height:12px; margin-right:6px; vertical-align:middle; border-radius:2px; }
+  table { border-collapse:collapse; font-size:12px; margin-top:8px; width:100%; }
+  th, td { border:1px solid #2a2d31; padding:4px 6px; text-align:right; }
+  th:first-child, td:first-child { text-align:left; }
+  .reason { color:#c9cdd2; font-size:12px; margin-top:8px; }
+  .summary { background:#15181c; border:1px solid #2a2d31; border-radius:6px; padding:10px; margin-top:6px; }
+  .toggles label { margin-right:12px; font-size:12px; }
+  .probe { margin-top:10px; font-size:12px; color:#c9cdd2; }
+  code { background:#1a1d21; padding:1px 4px; border-radius:3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Marswalk Planner — three-route comparison</h1>
+  <div class="sub">Shortest vs slope-aware vs full-constraint (mission). Click a cell to probe. Demo terrain; synthetic.</div>
+</header>
+<main>
+  <div><canvas id="map" width="560" height="560"></canvas>
+    <div class="probe" id="probe">Click the map to probe a cell.</div>
+  </div>
+  <div class="panel">
+    <div class="toggles" id="toggles"></div>
+    <div class="summary" id="summary">Loading…</div>
+    <table id="metrics"></table>
+    <div class="reason" id="reasons"></div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script>
+const COLORS = {
+  "Shortest (3-D distance)": "#ff4d4d",
+  "Slope-aware": "#ffa63d",
+  "Full-constraint (mission)": "#39d98a",
+};
+
+async function load() {
+  let bundle;
+  try {
+    bundle = await (await fetch("sample_routes.json")).json();
+  } catch (e) {
+    document.getElementById("summary").textContent =
+      "Could not load sample_routes.json. Serve this folder (e.g. `python -m http.server` in web/) and reload.";
+    return;
+  }
+  render(bundle);
+}
+
+function render(b) {
+  const canvas = document.getElementById("map");
+  const ctx = canvas.getContext("2d");
+  const rows = b.elevation.length, cols = b.elevation[0].length;
+  const px = Math.floor(Math.min(canvas.width / cols, canvas.height / rows));
+  canvas.width = cols * px; canvas.height = rows * px;
+
+  let lo = Infinity, hi = -Infinity;
+  for (const row of b.elevation) for (const v of row)
+    if (v !== null) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+  const span = hi - lo || 1;
+
+  const visible = {};
+  for (const r of b.routes) visible[r.name] = true;
+
+  function draw() {
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const v = b.elevation[r][c];
+      if (v === null) ctx.fillStyle = "#5a1a1a";
+      else { const t = Math.round(40 + 200 * (v - lo) / span); ctx.fillStyle = `rgb(${t},${t},${t})`; }
+      ctx.fillRect(c * px, r * px, px, px);
+    }
+    for (const route of b.routes) {
+      if (!visible[route.name] || !route.path) continue;
+      ctx.strokeStyle = COLORS[route.name] || "#39f";
+      ctx.lineWidth = Math.max(2, px / 3);
+      ctx.beginPath();
+      route.path.forEach(([r, c], i) => {
+        const x = c * px + px / 2, y = r * px + px / 2;
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      });
+      ctx.stroke();
+    }
+    for (const [cell, color] of [[b.start, "#39f"], [b.goal, "#ff3"]]) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(cell[1] * px + px / 2, cell[0] * px + px / 2, Math.max(3, px / 2), 0, 7);
+      ctx.fill();
+    }
+  }
+  draw();
+
+  // toggles
+  const tg = document.getElementById("toggles");
+  tg.innerHTML = "<div class='legend'><b>Routes:</b></div>";
+  for (const route of b.routes) {
+    const id = "tg_" + route.name.replace(/\W/g, "");
+    const label = document.createElement("label");
+    label.innerHTML = `<span style="background:${COLORS[route.name]}"></span>` +
+      `<input type="checkbox" id="${id}" checked> ${route.name}`;
+    tg.appendChild(label);
+    label.querySelector("input").addEventListener("change", (e) => {
+      visible[route.name] = e.target.checked; draw();
+    });
+  }
+
+  document.getElementById("summary").innerHTML = "<b>Summary:</b> " + b.summary;
+
+  // metrics table
+  const mt = document.getElementById("metrics");
+  mt.innerHTML = "<tr><th>Route</th><th>Feasible</th><th>Mission&nbsp;OK</th>" +
+    "<th>Length&nbsp;(m)</th><th>Max&nbsp;slope°</th><th>Hard&nbsp;viol.</th></tr>";
+  for (const route of b.routes) {
+    const m = route.metrics || {};
+    mt.innerHTML += `<tr><td>${route.name}</td><td>${route.feasible}</td>` +
+      `<td>${route.mission_feasible}</td>` +
+      `<td>${m.length_3d_m ? m.length_3d_m.toFixed(1) : "—"}</td>` +
+      `<td>${m.max_along_slope_deg != null ? m.max_along_slope_deg.toFixed(1) : "—"}</td>` +
+      `<td>${m.n_hard_violations != null ? m.n_hard_violations : "—"}</td></tr>`;
+  }
+  const rs = document.getElementById("reasons");
+  rs.innerHTML = "<b>Why:</b><ul>" +
+    b.routes.map(r => `<li><b>${r.name}:</b> ${r.reason}</li>`).join("") + "</ul>";
+
+  // probe
+  canvas.addEventListener("click", (ev) => {
+    const rect = canvas.getBoundingClientRect();
+    const c = Math.floor((ev.clientX - rect.left) / px);
+    const r = Math.floor((ev.clientY - rect.top) / px);
+    if (r < 0 || c < 0 || r >= rows || c >= cols) return;
+    const v = b.elevation[r][c];
+    document.getElementById("probe").innerHTML =
+      `Probe <code>(${r}, ${c})</code>: ` +
+      (v === null ? "unknown / nodata (blocked)" : `elevation ${v.toFixed(2)} m`);
+  });
+}
+
+load();
+</script>
+</body>
+</html>

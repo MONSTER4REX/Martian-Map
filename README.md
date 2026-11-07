@@ -24,8 +24,12 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **Step 6: time-windowed orienteering** (science under walk-back) | ✅ offline; exact subset DP |
 | **P1 data (offline)** — DEM derivatives, DTM QA (C1), DEM error ensembles (C2) | ✅ offline; network parts pending |
 | **P6 validation** — route metrics, route stability, ablation harness | ✅ offline |
-| Whole suite | ✅ 150 tests pass (~5 s, offline) |
-| P1 network (COG/manifest) / P2 ML / geometry / science / P5 frontend | ⏳ remaining |
+| **C8 geometry** — visibility / illumination / comms coverage | ✅ offline; real SPICE pending |
+| **C7/C9 science** — rock size-frequency + value raster | ✅ offline |
+| **P2 ML** — annotation, spatial splits, detection metrics | ✅ offline; training pending (GPU) |
+| **P3/P5 API + web** — FastAPI (/routes /probe) + React map | ✅ offline; verified in-browser |
+| Whole suite | ✅ 180 tests pass (~8 s, offline) |
+| Remaining | ⏳ C3 thermal / C4 radiation / C6 slip; real-data/GPU runs on owner machines |
 
 Nothing network- or GPU-dependent is "done" until an owner runs it on their
 machine and pastes back results (the sandbox has no AWS/PDS/ODE/Zenodo access
@@ -47,7 +51,7 @@ and no GPU).
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 150 tests, offline, ~5 s
+pytest            # 180 tests, offline, ~8 s
 ruff check .
 ```
 
