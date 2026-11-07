@@ -22,8 +22,10 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **Walk-back wired into planner** (mission constraint, step 4) | ✅ offline; gate satisfied → step 5 unlocked |
 | **Step 5: multi-objective NAMOA\*** (Pareto on a corridor) | ✅ offline; exact front, validated vs Dijkstra |
 | **Step 6: time-windowed orienteering** (science under walk-back) | ✅ offline; exact subset DP |
-| Whole suite | ✅ 126 tests pass (~4 s, offline) |
-| P1 data / P2 ML / P5 frontend / P6 validation | ⏳ not started |
+| **P1 data (offline)** — DEM derivatives, DTM QA (C1), DEM error ensembles (C2) | ✅ offline; network parts pending |
+| **P6 validation** — route metrics, route stability, ablation harness | ✅ offline |
+| Whole suite | ✅ 150 tests pass (~5 s, offline) |
+| P1 network (COG/manifest) / P2 ML / geometry / science / P5 frontend | ⏳ remaining |
 
 Nothing network- or GPU-dependent is "done" until an owner runs it on their
 machine and pastes back results (the sandbox has no AWS/PDS/ODE/Zenodo access
@@ -45,7 +47,7 @@ and no GPU).
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 126 tests, offline, ~4 s
+pytest            # 150 tests, offline, ~5 s
 ruff check .
 ```
 
