@@ -20,7 +20,8 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | A* validated vs independent oracle (NetworkX) | ✅ randomized suite |
 | **P4 EVA physics** (locomotion, consumables, **walk-back** gate) | ✅ offline, placeholder params; **UNTESTED ON REAL DATA** |
 | **Walk-back wired into planner** (mission constraint, step 4) | ✅ offline; gate satisfied → step 5 unlocked |
-| Whole suite | ✅ 112 tests pass (~2 s, offline) |
+| **Step 5: multi-objective NAMOA\*** (Pareto on a corridor) | ✅ offline; exact front, validated vs Dijkstra |
+| Whole suite | ✅ 120 tests pass (~4 s, offline) |
 | P1 data / P2 ML / P5 frontend / P6 validation | ⏳ not started |
 
 Nothing network- or GPU-dependent is "done" until an owner runs it on their
@@ -43,7 +44,7 @@ and no GPU).
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 112 tests, offline, ~2 s
+pytest            # 120 tests, offline, ~4 s
 ruff check .
 ```
 
@@ -84,7 +85,7 @@ Planner first, validated at each step, **before** any ML:
 4. ✅ mission constraints + walk-back (P4) — walk-back is now a hard planner
    constraint ([docs/physics.md](docs/physics.md), [docs/mission.md](docs/mission.md)).
    Gate satisfied.
-5. ⏳ multi-objective NAMOA* on a corridor — **now unlocked**
+5. ✅ multi-objective NAMOA* on a corridor ([docs/multiobjective.md](docs/multiobjective.md))
 6. ⏳ time-windowed orienteering
 
 ML (rock detector) only after the baseline planner passes and an ablation shows

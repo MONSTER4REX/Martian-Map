@@ -13,12 +13,6 @@ from marswalk.planner.astar import astar
 from marswalk.planner.connectivity import neighbor_offsets
 from marswalk.planner.grid import Grid
 from marswalk.planner.layers import BASELINE_LAYERS, LayerKind, LayerSpec
-from marswalk.planner.mission import (
-    MissionComparison,
-    WalkbackRouteResult,
-    compare_routes_with_walkback,
-    plan_walkback_route,
-)
 from marswalk.planner.routes import (
     PlannerConfig,
     RouteComparison,
@@ -26,6 +20,12 @@ from marswalk.planner.routes import (
     compare_routes,
     plan_route,
 )
+
+# NOTE: the physics-bridging planners live in their own modules to keep this
+# package free of a physics dependency (avoids an import cycle, since physics
+# imports planner primitives). Import them directly:
+#   from marswalk.planner.mission import plan_walkback_route, ...
+#   from marswalk.planner.multiobjective import plan_pareto, ...
 
 __all__ = [
     "Grid",
@@ -39,8 +39,4 @@ __all__ = [
     "LayerKind",
     "LayerSpec",
     "BASELINE_LAYERS",
-    "plan_walkback_route",
-    "compare_routes_with_walkback",
-    "WalkbackRouteResult",
-    "MissionComparison",
 ]

@@ -19,6 +19,8 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | P4 tests (locomotion, consumables, walk-back incl. rover-loss decision flip) | _pending (P4/P6)_ | Runs offline on synthetic fixtures. |
 | 2026-11-08 | Claude (Opus 4.8) | `planner/mission.py`: walk-back wired as a hard planner constraint (time-objective A* + prune); route-level scenario flip | _pending (P3/P4)_ | Offline. Satisfies §3 gate. UNTESTED ON REAL DATA. |
 | 2026-11-08 | Claude (Opus 4.8) | Mission tests (soundness self-check, scenario flip, infeasible goal/start) + docs/mission.md | _pending (P3/P6)_ | Runs offline on synthetic fixtures. |
+| 2026-11-08 | Claude (Opus 4.8) | `planner/multiobjective.py`: exact Pareto (NAMOA*-style Martins) on a corridor + `corridor_mask`; docs/multiobjective.md | _pending (P3)_ | Offline. Extremes validated vs NetworkX. |
+| 2026-11-08 | Claude (Opus 4.8) | Multi-objective tests (dominance, non-dominated front, per-objective extremes vs Dijkstra, corridor) | _pending (P3/P6)_ | Runs offline on synthetic fixtures. |
 
 ## How to keep this honest
 
