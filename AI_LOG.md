@@ -17,6 +17,8 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | Test suite: A* vs NetworkX oracle (randomized), grid, slope, routes | _pending (P3/P6)_ | Runs offline on synthetic fixtures. |
 | 2026-11-08 | Claude (Opus 4.8) | P4 EVA physics: `locomotion`, `consumables`, `walkback` (nominal / rover-loss / suit-degraded) | _pending (P4)_ | Offline, synthetic terrain. ALL parameters are placeholders. UNTESTED ON REAL DATA. |
 | 2026-11-08 | Claude (Opus 4.8) | P4 tests (locomotion, consumables, walk-back incl. rover-loss decision flip) | _pending (P4/P6)_ | Runs offline on synthetic fixtures. |
+| 2026-11-08 | Claude (Opus 4.8) | `planner/mission.py`: walk-back wired as a hard planner constraint (time-objective A* + prune); route-level scenario flip | _pending (P3/P4)_ | Offline. Satisfies §3 gate. UNTESTED ON REAL DATA. |
+| 2026-11-08 | Claude (Opus 4.8) | Mission tests (soundness self-check, scenario flip, infeasible goal/start) + docs/mission.md | _pending (P3/P6)_ | Runs offline on synthetic fixtures. |
 
 ## How to keep this honest
 
