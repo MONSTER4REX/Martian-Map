@@ -8,7 +8,6 @@ as EVA-scale detail, and share-alike / non-commercial terms are tracked).
 
 from __future__ import annotations
 
-import json
 from enum import Enum
 from pathlib import Path
 

@@ -23,7 +23,6 @@ from __future__ import annotations
 
 import math
 
-import numpy as np
 from pydantic import BaseModel, Field
 
 from marswalk.physics.consumables import ConsumablesModel

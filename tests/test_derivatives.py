@@ -1,7 +1,6 @@
 import math
 
 import numpy as np
-import pytest
 
 from marswalk.data.derivatives import aspect_degrees, curvature, hillshade, slope_degrees
 from marswalk.planner.grid import Grid

@@ -1,5 +1,4 @@
 import networkx as nx
-import numpy as np
 import pytest
 
 from marswalk.physics.locomotion import LocomotionParams, edge_time_s
@@ -10,7 +9,7 @@ from marswalk.planner.multiobjective import (
     plan_pareto,
 )
 from marswalk.planner.routes import PlannerConfig, _make_neighbors
-from marswalk.planner.slope import edge_along_slope_deg, terrain_gradient
+from marswalk.planner.slope import terrain_gradient
 from marswalk.terrain.synthetic import random_smooth_terrain
 
 
