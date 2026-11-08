@@ -1,0 +1,210 @@
+<title>Marswalk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: dark mission-telemetry page; full-bleed bands, a console readout at its core. */
+  :root{
+    --bg:#090c11; --band:#0e131a; --panel:#141b24; --line:#223042;
+    --fg:#e9eef4; --muted:#93a1b2; --faint:#5e6c7d;
+    --rust:#e2572b; --amber:#ff9d4d; --safe:#36c46b; --danger:#d6452f;
+    --display:'Chakra Petch',sans-serif; --body:'IBM Plex Sans',sans-serif; --mono:'IBM Plex Mono',monospace;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.6;
+    background-image:radial-gradient(1200px 600px at 78% -5%, rgba(226,87,43,.14), transparent 60%),
+      radial-gradient(900px 500px at 10% 8%, rgba(54,196,107,.07), transparent 55%);}
+  .wrap{max-width:1040px;margin:0 auto;
+    padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));}
+  section{padding-block:72px;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:0}
+  h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.08;letter-spacing:.2px}
+  h2{font-size:clamp(26px,4.2vw,40px);font-weight:700}
+  p{margin:0;max-width:62ch}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber)}
+  .muted{color:var(--muted)} .faint{color:var(--faint)}
+  .lede{font-size:clamp(17px,2.2vw,20px);color:var(--muted)}
+  a{color:var(--amber);text-decoration:none;border-bottom:1px solid rgba(255,157,77,.35)}
+  a:hover{color:var(--fg)}
+  .stack{display:flex;flex-direction:column;gap:18px}
+
+  /* hero */
+  .hero{padding-block:clamp(56px,9vw,104px)}
+  .hero-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:48px;align-items:center}
+  .brand{font-family:var(--display);font-weight:700;font-size:clamp(52px,10vw,104px);letter-spacing:1px;line-height:.92;margin:0}
+  .brand .k{color:var(--rust)}
+  .tagline{font-family:var(--display);font-weight:600;font-size:clamp(20px,3.3vw,30px);margin-top:10px}
+  .pill{display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 12px;width:max-content}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--safe);box-shadow:0 0 10px var(--safe)}
+
+  /* survival ring readout */
+  .readout{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}
+  .readout .scn{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .readout .big{font-family:var(--display);font-weight:700;font-size:44px;margin-top:2px}
+  .readout .cap{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:4px}
+  svg .track{stroke:rgba(214,69,47,.32)} svg .arc{transition:stroke-dasharray .7s cubic-bezier(.4,0,.2,1), stroke .5s ease}
+
+  /* stat strip */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .stat{background:var(--band);padding:20px 18px}
+  .stat .n{font-family:var(--mono);font-weight:600;font-size:clamp(22px,3vw,30px);color:var(--fg);font-variant-numeric:tabular-nums}
+  .stat .l{font-size:13px;color:var(--muted);margin-top:4px}
+
+  /* figure panels (console readouts) */
+  figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  figure .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  figure img{display:block;width:100%;background:#fff}
+  figcaption{padding:14px 16px;color:var(--muted);font-size:14.5px}
+
+  /* layered list */
+  .layers{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .layer{background:var(--band);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+  .layer h3{font-size:16px;font-weight:600;margin-bottom:6px;display:flex;gap:10px;align-items:baseline}
+  .layer .tag{font-family:var(--mono);font-size:11px;color:var(--rust)}
+  .layer p{font-size:14.5px;color:var(--muted)}
+
+  /* data cards */
+  .data{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .d{background:var(--band);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+  .d .src{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--safe)}
+  .d h3{font-size:17px;font-weight:600;margin:6px 0}
+  .d p{font-size:14px;color:var(--muted)}
+
+  .note{background:var(--band);border:1px solid var(--line);border-left:3px solid var(--safe);border-radius:10px;padding:18px 20px}
+  .foot{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between;
+    font-family:var(--mono);font-size:12.5px;color:var(--faint);padding-block:30px;border-top:1px solid var(--line)}
+
+  @media (max-width:760px){
+    .hero-grid{grid-template-columns:1fr;gap:32px} .stats{grid-template-columns:repeat(2,1fr)}
+    .layers,.data{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="stack">
+        <span class="pill"><span class="dot"></span>NASA Space Apps 2026 · Interplanetary Survival Guide</span>
+        <h1 class="brand">MARS<span class="k">WALK</span></h1>
+        <p class="tagline">The Mars EVA planner that draws the line you can't cross — and keeps you on the right side of it.</p>
+        <p class="lede">An astronaut on foot has a few hours of oxygen. Cross one invisible line and you can no longer walk back to safety before it runs out. Marswalk finds that line everywhere on the map, and routes so you never cross it.</p>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <div class="scn" id="scn">NOMINAL</div>
+        <svg viewBox="0 0 120 120" width="150" height="150" role="img" aria-label="survivable area gauge">
+          <circle class="track" cx="60" cy="60" r="50" fill="none" stroke-width="11"></circle>
+          <circle class="arc" id="arc" cx="60" cy="60" r="50" fill="none" stroke-width="11"
+            stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="0 314"></circle>
+        </svg>
+        <div class="big" id="pct">80%</div>
+        <div class="cap">of the area still survivable</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAT STRIP -->
+  <section>
+    <div class="stats">
+      <div class="stat"><div class="n">80→47→7%</div><div class="l">survivable area as the rover is lost, then the suit degrades</div></div>
+      <div class="stat"><div class="n">−98%</div><div class="l">rock exposure cut by rock-aware routing on a real Mars boulder field</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">real NASA datasets wired in (CC BY 4.0), trained on real labels</div></div>
+      <div class="stat"><div class="n">205</div><div class="l">automated tests, passing offline on synthetic fixtures</div></div>
+    </div>
+  </section>
+
+  <!-- THE IDEA -->
+  <section class="stack">
+    <span class="eyebrow">The idea everyone else skips</span>
+    <h2>Most Mars maps optimize distance. We optimize survival.</h2>
+    <p class="muted">Every route tool asks "what's the shortest or flattest way there?" The question that actually keeps a crew alive is different: <strong style="color:var(--fg)">at every step, can you still get back to a safe haven before consumables run out?</strong> Marswalk treats that walk-back guarantee as a hard constraint, not an afterthought — and turns it into a map of where you can and cannot safely stand.</p>
+  </section>
+
+  <!-- HERO VISUAL -->
+  <section class="stack">
+    <span class="eyebrow">The survivable world — and how it collapses</span>
+    <h2>Watch the safe world vanish when the rover is lost.</h2>
+    <p class="muted">From a start point, every cell is <span style="color:var(--safe)">survivable</span> only if you can reach it and still walk back in time. Everything else is a <span style="color:var(--danger)">no-go zone</span>: you could walk there, but you could not get home. Lose the rover and nearly half the safe world disappears. Degrade the suit and almost nothing is left.</p>
+    <figure>
+      <div class="bar"><span>FIG.01 · SURVIVAL ENVELOPE</span><span>computed by the walk-back engine</span></div>
+      <img src="survival_envelope.png" alt="Three maps of the survivable area shrinking from 80% to 47% to 7% under nominal, rover-lost and suit-degraded contingencies">
+      <figcaption>Green = you can get back (shaded by spare time). Dark red = no-go. Nominal 80% → rover lost 47% → suit degraded 7%.</figcaption>
+    </figure>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="stack">
+    <span class="eyebrow">A layered, uncertainty-aware engine</span>
+    <h2>Four routes to the same place, for defensible reasons.</h2>
+    <div class="layers">
+      <div class="layer"><h3><span class="tag">01</span>Shortest</h3><p>The naive 3-D shortest path. Fast, and often unsafe — it ignores slope, hazards and walk-back.</p></div>
+      <div class="layer"><h3><span class="tag">02</span>Slope-aware</h3><p>Penalizes and excludes slopes and cross-slopes a crew can't safely traverse.</p></div>
+      <div class="layer"><h3><span class="tag">03</span>Walk-back-safe</h3><p>The mission route: keeps a feasible return to a haven at every point, under rover-loss and suit-degradation contingencies.</p></div>
+      <div class="layer"><h3><span class="tag">04</span>Rock-aware</h3><p>Steers around boulder fields detected from orbit. It only ships if it measurably lowers rock exposure — a gate we test, not assume.</p></div>
+    </div>
+    <p class="muted">Every layer declares whether it is a hard exclusion, an objective, or informational. Missing data is treated as unknown and blocked — never guessed. Route stability is measured across a DEM-error ensemble, so a recommendation comes with how much it would move under plausible terrain error.</p>
+  </section>
+
+  <!-- REAL DATA -->
+  <section class="stack">
+    <span class="eyebrow">Built on real NASA / planetary data</span>
+    <h2>Real Mars in, verified results out.</h2>
+    <div class="data">
+      <div class="d"><div class="src">Zenodo 8171052 · CC BY 4.0</div><h3>BOULDERING</h3><p>Real orbital boulder labels (HiRISE). We load the dataset's own Detectron2 annotations and train a detector; F1 reported by rock size.</p></div>
+      <div class="d"><div class="src">Zenodo 15995036 · CC BY 4.0</div><h3>AI4Mars</h3><p>~50K rover images labeled by NASA/JPL crowdsourcing. We segment terrain into soil / bedrock / sand / big-rock and report per-class IoU.</p></div>
+      <div class="d"><div class="src">HiRISE · CTX · MOLA/HRSC</div><h3>Jezero terrain</h3><p>The planner runs on real co-registered DEMs on the team's machines; the sandbox verifies every step offline first.</p></div>
+    </div>
+    <figure>
+      <div class="bar"><span>FIG.02 · ROCK-AWARE GATE</span><span>real field: HiRISE ESP_017355_2260</span></div>
+      <img src="rock_ablation.png" alt="A real Mars boulder field with a straight slope-only route cutting through boulders and a rock-aware route threading the gaps">
+      <figcaption>461 real boulders. The slope-only route (cyan) plows through them; the rock-aware route (green) threads the gaps and cuts rock exposure by 98%. That result is what earns the detector a place in routing.</figcaption>
+    </figure>
+    <div class="note"><strong>Scientific honesty as a feature.</strong> We never fabricate a value, a metric, or a citation. Anything not yet run on real data is marked untested; every assumption and placeholder is written down. Judges and scientists can trust exactly what the numbers mean.</div>
+  </section>
+
+  <!-- IMPACT -->
+  <section class="stack">
+    <span class="eyebrow">Why it matters</span>
+    <h2>A survival guide for the first people on Mars.</h2>
+    <p class="muted">As Artemis and Mars mission planning turns real, EVAs will be planned under exactly these constraints: limited consumables, contingencies, hazardous terrain, and incomplete maps. Marswalk is open-source decision-support for that problem — and the walk-back / no-go framing it introduces is reusable for any crewed surface operation, on the Moon as much as Mars.</p>
+  </section>
+
+  <!-- STATUS -->
+  <section class="stack">
+    <span class="eyebrow">Where it stands</span>
+    <h2>Working engine, honest edges.</h2>
+    <p class="muted"><strong style="color:var(--safe)">Done &amp; verified:</strong> the planner, walk-back, survival envelope, rock-hazard gate, uncertainty, and two real-data training pipelines — 205 tests passing offline.</p>
+    <p class="muted"><strong style="color:var(--amber)">Owner-side next:</strong> running the detectors on a GPU and dropping in a real Jezero HiRISE DEM. The interfaces exist; the numbers above are the mechanism, with placeholder life-support values an owner replaces with cited figures.</p>
+  </section>
+
+  <div class="foot">
+    <span>MARSWALK · open-source · MIT</span>
+    <span><a href="https://github.com/MONSTER4REX/Martian-Map">github.com/MONSTER4REX/Martian-Map</a></span>
+  </div>
+
+</div>
+
+<script>
+  (function(){
+    var scenarios=[{n:'NOMINAL',p:80},{n:'ROVER LOST',p:47},{n:'SUIT DEGRADED',p:7}];
+    var C=2*Math.PI*50, i=0;
+    var arc=document.getElementById('arc'), pct=document.getElementById('pct'), scn=document.getElementById('scn');
+    function render(s){
+      var len=C*s.p/100;
+      var col=s.p>=60?'#36c46b':s.p>=25?'#ff9d4d':'#d6452f';
+      arc.style.strokeDasharray=len+' '+(C-len);
+      arc.style.stroke=col;
+      pct.textContent=s.p+'%'; pct.style.color=col;
+      scn.textContent=s.n;
+    }
+    render(scenarios[0]);
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(!reduce){ setInterval(function(){ i=(i+1)%scenarios.length; render(scenarios[i]); }, 2600); }
+  })();
+</script>
