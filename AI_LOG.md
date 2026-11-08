@@ -32,6 +32,7 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | P2 `ml/` annotation schema + spatial splits + detection metrics (F1 by size bin) + guarded `train.py` + scripts/train_rock_detector.py + tests + docs/ml.md | _pending (P2)_ | Schema/splits/metrics tested offline; training UNTESTED ON REAL DATA (needs torch+GPU). |
 | 2026-11-08 | Claude (Opus 4.8) | P3/P5 `api/` (pure service + FastAPI /routes /probe /health + OpenAPI) + `web/index.html` (React map, probe) + export script + tests + docs/api.md | _pending (P3/P5)_ | Tested offline incl. FastAPI TestClient; verified rendering in-browser. |
 | 2026-11-08 | Claude (Opus 4.8) | P4 C3 `thermal.py` / C4 `radiation.py` / C6 `slip.py` screening (placeholders + validity notes) + tests + docs/screening.md | _pending (P4)_ | Offline, structural tests only. PLACEHOLDER models; validate vs MEDA / negative rover cases. |
+| 2026-11-08 | Claude (Opus 4.8) | `cli.py` (`marswalk mission` end-to-end demo: 3-route compare + walk-back flip + route stability) + `[project.scripts]` + tests + docs/cli.md | _pending (P3/P5)_ | Offline. Drives the real modules; no hand-authored numbers. UNTESTED ON REAL DATA. |
 
 ## How to keep this honest
 

@@ -28,8 +28,9 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **C7/C9 science** — rock size-frequency + value raster | ✅ offline |
 | **P2 ML** — annotation, spatial splits, detection metrics | ✅ offline; training pending (GPU) |
 | **P3/P5 API + web** — FastAPI (/routes /probe) + React map | ✅ offline; verified in-browser |
+| **`marswalk` CLI** — end-to-end mission report (3-route + walk-back + stability) | ✅ offline; drives real modules |
 | **C3/C4/C6 screening** — thermal / radiation / slip (placeholders) | ✅ offline; validate vs MEDA / rover cases |
-| Whole suite | ✅ 186 tests pass (~7 s, offline) |
+| Whole suite | ✅ 191 tests pass (offline) |
 | Remaining | ⏳ real-data / GPU runs on owner machines; model validation |
 
 Nothing network- or GPU-dependent is "done" until an owner runs it on their
@@ -52,8 +53,14 @@ and no GPU).
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 186 tests, offline, ~7 s
+pytest            # 191 tests, offline
 ruff check .
+```
+
+End-to-end mission demo (drives the real pipeline):
+
+```bash
+marswalk mission            # or: PYTHONPATH=src python -m marswalk.cli mission
 ```
 
 Three-route demo:
