@@ -27,7 +27,7 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **C8 geometry** — visibility / illumination / comms coverage | ✅ offline; real SPICE pending |
 | **C7/C9 science** — rock size-frequency + value raster | ✅ offline |
 | **P2 ML** — annotation, spatial splits, detection metrics | ✅ offline; training pending (GPU) |
-| **Training notebook** — Faster R-CNN, runs on synthetic; real run owner-side | ✅ code path run (CPU); UNTESTED on real data |
+| **Training notebook** — Faster R-CNN on **real BOULDERING data** (CC BY 4.0) | ✅ verified on real download (CPU); full GPU run owner-side |
 | **P3/P5 API + web** — FastAPI (/routes /probe) + React map | ✅ offline; verified in-browser |
 | **`marswalk` CLI** — end-to-end mission report (3-route + walk-back + stability) | ✅ offline; drives real modules |
 | **Demo figure** — 3-panel render (routes + walk-back field + stability map) | ✅ offline ([docs/cli.md](docs/cli.md)) |

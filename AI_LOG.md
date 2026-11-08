@@ -34,7 +34,7 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | P4 C3 `thermal.py` / C4 `radiation.py` / C6 `slip.py` screening (placeholders + validity notes) + tests + docs/screening.md | _pending (P4)_ | Offline, structural tests only. PLACEHOLDER models; validate vs MEDA / negative rover cases. |
 | 2026-11-08 | Claude (Opus 4.8) | `cli.py` (`marswalk mission` end-to-end demo: 3-route compare + walk-back flip + route stability) + `[project.scripts]` + tests + docs/cli.md | _pending (P3/P5)_ | Offline. Drives the real modules; no hand-authored numbers. UNTESTED ON REAL DATA. |
 | 2026-11-08 | Claude (Opus 4.8) | `scripts/render_mission_figure.py` (3-panel demo PNG) + `viz` extra + smoke test + docs/mission_figure.png | _pending (P5)_ | Offline. Rendered from the real pipeline. Figure is a synthetic-terrain demo; PLACEHOLDER params. |
-| 2026-11-08 | Claude (Opus 4.8) | `notebooks/train_rock_detector.ipynb` (torchvision Faster R-CNN wired to ml.splits + ml.metrics_det) + `nb` extra + torchvision/pillow in `ml` | _pending (P2)_ | Code path executed on synthetic data (CPU). Trained result UNTESTED ON REAL DATA (needs GPU + AI4Mars labels). Gated by §3 ablation. |
+| 2026-11-08 | Claude (Opus 4.8) | `notebooks/train_rock_detector.ipynb` — **real BOULDERING data** (Zenodo 8171052, CC BY 4.0): MD5-verified download, Detectron2-JSON loader, authors' split, Faster R-CNN, F1-by-size; `nb` extra; torchvision/pillow in `ml` | _pending (P2)_ | Verified against the real 265 MB download (CPU): JSON load (953 patches / 39k boxes; Mars subset 49/6.8k), split, train+eval step all run. Trained result owner-side (GPU). Gated by §3 ablation. |
 
 ## How to keep this honest
 

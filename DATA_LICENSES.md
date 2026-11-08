@@ -21,9 +21,10 @@ source — do not take the notes below as authoritative.
 | MEDA / REMS / RAD | NASA PDS | NASA data | Cite | UNVERIFIED |
 | PLACES (Perseverance traverse) | USGS / NASA | NASA data | Cite release number | UNVERIFIED |
 | SPICE kernels (MRO/MAVEN/Odyssey/TGO) | NAIF / ESA | Public; ESA kernels separate terms | Cite kernel set + version | UNVERIFIED |
-| Boulder outlines (Zenodo 8171052 / 14250970) | Zenodo | Per-record (check CC variant) | Per record | UNVERIFIED |
+| BOULDERING (Zenodo 8171052) — images + boulder labels + Detectron2 JSON + model | Zenodo | **CC BY 4.0** (Zenodo metadata) | Attribute: cite Prieur et al. 2023, doi:10.5281/zenodo.8171052 | Zenodo API, 2026-11-08 (AI-read; owner confirm) |
+| Boulder raw labels (Zenodo 14250970, shapefiles) | Zenodo | **CC BY 4.0** (Zenodo metadata) | Attribute per record | Zenodo API, 2026-11-08 (AI-read; owner confirm) |
 | RMaM-2020 rockfall set | MPDL Edmond | Pretraining only per brief | Do not ship as labels | UNVERIFIED |
-| AI4Mars | Zenodo / NASA | **License unspecified on NASA portal** | Do not use until clarified | UNVERIFIED |
+| AI4Mars (Zenodo 15995036) | Zenodo / NASA | NASA portal: unspecified; **Zenodo record states CC BY 4.0** | Resolve the discrepancy before shipping; rover-view, not orbital | Zenodo API, 2026-11-08 (discrepancy — owner confirm authoritative source) |
 
 ## Flow-down rules (apply when they are confirmed)
 
