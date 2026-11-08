@@ -66,11 +66,35 @@ all run on the actual patches (CPU). The **trained result is still owner-side**
 rock-aware cost changes routes. **Cite Prieur et al. (2023), CC BY 4.0.**
 `ml/train.py` remains the owner config-stub; the notebook holds the real loop.
 
-> **AI4Mars note:** `DATA_LICENSES.md` recorded "license unspecified"; the Zenodo
-> record [15995036](https://doi.org/10.5281/zenodo.15995036) states **CC BY 4.0**.
-> It is *rover-view* navcam terrain (not map-registered orbital boulders), so
-> BOULDERING is the better fit for map-based routing. Confirm the authoritative
-> AI4Mars licence before shipping AI4Mars-derived products.
+## AI4Mars terrain segmentation (real data)
 
-Label sources and licenses (Zenodo boulder sets, RMaM-2020 pretraining-only,
-AI4Mars license unspecified) are tracked in `DATA_LICENSES.md`.
+`notebooks/train_ai4mars_terrain.ipynb` is a *separate* task: per-pixel terrain
+**semantic segmentation** on the real **AI4Mars** dataset (Swan, Atha, Ono et
+al. — [doi:10.5281/zenodo.15995036](https://doi.org/10.5281/zenodo.15995036),
+**CC BY 4.0**, ~16 GB). Rover-view (navcam), not orbital, so it classifies what
+the rover sees rather than giving a top-down hazard raster. It:
+
+- downloads the real 16 GB merged dataset (MD5-verified);
+- loads **MSL NavCam** (`msl/ncam`) image/label pairs with the NAV class key
+  **verified from the dataset's `label_keys.json`** — `0` soil, `1` bedrock,
+  `2` sand, `3` big rock, `255` NULL/ignore — using the authors' `train/` crowd
+  split and `test/masked-gold-min{1,2,3}-100agree/` expert gold;
+- trains torchvision **DeepLabV3-ResNet50** (CrossEntropy `ignore_index=255`,
+  AMP + `channels_last`), logging peak VRAM + epoch time;
+- reports **per-class IoU + mIoU**, highlighting **big-rock IoU** (the
+  routing-relevant hazard class).
+
+```bash
+pip install -e ".[nb]"
+jupyter notebook notebooks/train_ai4mars_terrain.ipynb
+```
+
+Verified here on **real extracted MSL NavCam patches** (8 train / 4 test,
+range-read from the 16 GB archive without downloading it all): load → train →
+per-class IoU all run on CPU. Full training is owner-side (16 GB + GPU).
+`M2020_GEO` uses a different geology key (values by tens) and is skipped.
+**Cite Swan/Atha/Ono et al. (CVPRW 2021 / IEEE Aero 2022).**
+
+Label sources and licenses — BOULDERING (CC BY 4.0), AI4Mars (CC BY 4.0 on
+Zenodo; NASA-portal note unresolved), RMaM-2020 (pretraining-only) — are tracked
+in `DATA_LICENSES.md`.

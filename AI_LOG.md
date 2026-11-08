@@ -35,6 +35,7 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | `cli.py` (`marswalk mission` end-to-end demo: 3-route compare + walk-back flip + route stability) + `[project.scripts]` + tests + docs/cli.md | _pending (P3/P5)_ | Offline. Drives the real modules; no hand-authored numbers. UNTESTED ON REAL DATA. |
 | 2026-11-08 | Claude (Opus 4.8) | `scripts/render_mission_figure.py` (3-panel demo PNG) + `viz` extra + smoke test + docs/mission_figure.png | _pending (P5)_ | Offline. Rendered from the real pipeline. Figure is a synthetic-terrain demo; PLACEHOLDER params. |
 | 2026-11-08 | Claude (Opus 4.8) | `notebooks/train_rock_detector.ipynb` — **real BOULDERING data** (Zenodo 8171052, CC BY 4.0): MD5-verified download, Detectron2-JSON loader, authors' split, Faster R-CNN, F1-by-size; `nb` extra; torchvision/pillow in `ml` | _pending (P2)_ | Verified against the real 265 MB download (CPU): JSON load (953 patches / 39k boxes; Mars subset 49/6.8k), split, train+eval step all run. Trained result owner-side (GPU). Gated by §3 ablation. |
+| 2026-11-09 | Claude (Opus 4.8) | `notebooks/train_ai4mars_terrain.ipynb` — **real AI4Mars data** (Zenodo 15995036, CC BY 4.0): DeepLabV3 terrain segmentation, NAV 4-class key (verified from `label_keys.json`), MSL NavCam, per-class IoU + big-rock IoU | _pending (P2)_ | Structure + classes verified by range-reading the 16 GB archive; load→train→IoU verified on real extracted MSL NavCam patches (8 train/4 test, CPU). Full run owner-side (16 GB + GPU). Rover-view, not orbital. Gated by §3. |
 
 ## How to keep this honest
 
