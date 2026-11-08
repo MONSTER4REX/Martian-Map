@@ -33,5 +33,26 @@ reduce rock exposure vs slope-only. Fallback: a literature rock-abundance prior.
 - Pre-cut tiles to disk once; do not run training and horizon ray-march on the
   same GPU at once (§4).
 
+## Training notebook (runnable)
+
+`notebooks/train_rock_detector.ipynb` is a concrete, runnable detector built on
+the modules above: torchvision **Faster R-CNN** (class 1 = rock), the spatial
+holdout (`ml.splits`), and **F1-by-size** eval (`ml.metrics_det`). It runs
+end-to-end on *synthetic* tiles on any machine (CPU included) so the machinery is
+verifiable, then you point `cfg.annotations_json` at real labels and set each
+`Tile.path`. The loop logs **peak VRAM** and **epoch time**, and the final cell
+prints the gate metric (F1 ≥ 1.5 m) plus a "what to paste back" checklist.
+
+```bash
+pip install -e ".[nb]"          # torch, torchvision, pillow, jupyter
+jupyter notebook notebooks/train_rock_detector.ipynb
+```
+
+The data→split→train-step→eval logic was executed on synthetic data (CPU) to
+confirm it runs; the **trained result on real data is still UNTESTED**, and ML
+stays a capability until the P6 ablation shows rock-aware cost changes routes.
+`ml/train.py` remains the owner stub (config + guarded entry point); the notebook
+is where the actual loop lives.
+
 Label sources and licenses (Zenodo boulder sets, RMaM-2020 pretraining-only,
 AI4Mars license unspecified) are tracked in `DATA_LICENSES.md`.

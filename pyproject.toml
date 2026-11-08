@@ -37,7 +37,8 @@ viz = [
 # Owner machines only (network/GPU; UNTESTED in CI sandbox):
 geo = ["rasterio>=1.3"]
 spice = ["spiceypy>=6.0"]
-ml = ["torch>=2.2"]
+ml = ["torch>=2.2", "torchvision>=0.17", "pillow>=10.0"]
+nb = ["jupyter>=1.0", "torch>=2.2", "torchvision>=0.17", "pillow>=10.0"]  # training notebook
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/marswalk"]
