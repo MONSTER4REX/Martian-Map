@@ -6,7 +6,12 @@ perturbation (the headline uncertainty figure), and whether a feature actually
 changes decisions (the ablation gate).
 """
 
-from marswalk.validation.ablation import AblationReport, ablation
+from marswalk.validation.ablation import (
+    AblationReport,
+    RockAblationReport,
+    ablation,
+    rock_ablation,
+)
 from marswalk.validation.metrics import (
     discrete_frechet,
     hazard_exposure,
@@ -26,4 +31,6 @@ __all__ = [
     "StabilityReport",
     "ablation",
     "AblationReport",
+    "rock_ablation",
+    "RockAblationReport",
 ]

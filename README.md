@@ -24,6 +24,7 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **Step 6: time-windowed orienteering** (science under walk-back) | ✅ offline; exact subset DP |
 | **P1 data (offline)** — DEM derivatives, DTM QA (C1), DEM error ensembles (C2) | ✅ offline; network parts pending |
 | **P6 validation** — route metrics, route stability, ablation harness | ✅ offline |
+| **Rock-hazard layer + §3 gate** — detector→planner link, rock-aware routing | ✅ offline; gate demo on **real** Mars boulders ([docs/hazard.md](docs/hazard.md)) |
 | **C8 geometry** — visibility / illumination / comms coverage | ✅ offline; real SPICE pending |
 | **C7/C9 science** — rock size-frequency + value raster | ✅ offline |
 | **P2 ML** — annotation, spatial splits, detection metrics | ✅ offline; training pending (GPU) |
@@ -33,7 +34,7 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **`marswalk` CLI** — end-to-end mission report (3-route + walk-back + stability) | ✅ offline; drives real modules |
 | **Demo figure** — 3-panel render (routes + walk-back field + stability map) | ✅ offline ([docs/cli.md](docs/cli.md)) |
 | **C3/C4/C6 screening** — thermal / radiation / slip (placeholders) | ✅ offline; validate vs MEDA / rover cases |
-| Whole suite | ✅ 192 tests pass (offline) |
+| Whole suite | ✅ 199 tests pass (offline) |
 | Remaining | ⏳ real-data / GPU runs on owner machines; model validation |
 
 Nothing network- or GPU-dependent is "done" until an owner runs it on their
@@ -56,7 +57,7 @@ and no GPU).
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 192 tests, offline
+pytest            # 199 tests, offline
 ruff check .
 ```
 
