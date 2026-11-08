@@ -24,6 +24,13 @@ from marswalk.physics.locomotion import (
 )
 from marswalk.physics.radiation import RadiationScreen
 from marswalk.physics.slip import SlipParams, slip_proxy
+from marswalk.physics.survival import (
+    SurvivalComparison,
+    SurvivalEnvelope,
+    compare_survival,
+    reach_time_field,
+    survival_envelope,
+)
 from marswalk.physics.thermal import ThermalParams, surface_temp_range_k
 from marswalk.physics.walkback import (
     WalkbackReport,
@@ -48,6 +55,11 @@ __all__ = [
     "time_to_haven_field",
     "check_walkback",
     "standard_scenarios",
+    "reach_time_field",
+    "survival_envelope",
+    "SurvivalEnvelope",
+    "compare_survival",
+    "SurvivalComparison",
     "ThermalParams",
     "surface_temp_range_k",
     "RadiationScreen",
