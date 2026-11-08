@@ -33,6 +33,7 @@ you read and run the code.
 | 2026-11-08 | Claude (Opus 4.8) | P3/P5 `api/` (pure service + FastAPI /routes /probe /health + OpenAPI) + `web/index.html` (React map, probe) + export script + tests + docs/api.md | _pending (P3/P5)_ | Tested offline incl. FastAPI TestClient; verified rendering in-browser. |
 | 2026-11-08 | Claude (Opus 4.8) | P4 C3 `thermal.py` / C4 `radiation.py` / C6 `slip.py` screening (placeholders + validity notes) + tests + docs/screening.md | _pending (P4)_ | Offline, structural tests only. PLACEHOLDER models; validate vs MEDA / negative rover cases. |
 | 2026-11-08 | Claude (Opus 4.8) | `cli.py` (`marswalk mission` end-to-end demo: 3-route compare + walk-back flip + route stability) + `[project.scripts]` + tests + docs/cli.md | _pending (P3/P5)_ | Offline. Drives the real modules; no hand-authored numbers. UNTESTED ON REAL DATA. |
+| 2026-11-08 | Claude (Opus 4.8) | `scripts/render_mission_figure.py` (3-panel demo PNG) + `viz` extra + smoke test + docs/mission_figure.png | _pending (P5)_ | Offline. Rendered from the real pipeline. Figure is a synthetic-terrain demo; PLACEHOLDER params. |
 
 ## How to keep this honest
 

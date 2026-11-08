@@ -38,6 +38,18 @@ Running without a subcommand defaults to `mission`. Without installing, use
 | `--sill-m2`, `--range-m` | DEM error variance / correlation length (PLACEHOLDERS) |
 | `--json` | emit JSON instead of text |
 
+## Figure
+
+`scripts/render_mission_figure.py` renders the same pipeline as a 3-panel PNG
+(terrain + three routes, walk-back time-to-haven field, route-stability map):
+
+```bash
+pip install -e ".[viz]"
+python scripts/render_mission_figure.py -o docs/mission_figure.png
+```
+
+![mission figure](mission_figure.png)
+
 ## Validity
 
 Offline, synthetic terrain only. **All physics and threshold parameters are

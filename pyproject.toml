@@ -31,6 +31,9 @@ api = [
     "fastapi>=0.110",
     "uvicorn>=0.29",
 ]
+viz = [
+    "matplotlib>=3.8",   # offline figure rendering (scripts/render_mission_figure.py)
+]
 # Owner machines only (network/GPU; UNTESTED in CI sandbox):
 geo = ["rasterio>=1.3"]
 spice = ["spiceypy>=6.0"]

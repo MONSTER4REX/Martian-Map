@@ -29,8 +29,9 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **P2 ML** — annotation, spatial splits, detection metrics | ✅ offline; training pending (GPU) |
 | **P3/P5 API + web** — FastAPI (/routes /probe) + React map | ✅ offline; verified in-browser |
 | **`marswalk` CLI** — end-to-end mission report (3-route + walk-back + stability) | ✅ offline; drives real modules |
+| **Demo figure** — 3-panel render (routes + walk-back field + stability map) | ✅ offline ([docs/cli.md](docs/cli.md)) |
 | **C3/C4/C6 screening** — thermal / radiation / slip (placeholders) | ✅ offline; validate vs MEDA / rover cases |
-| Whole suite | ✅ 191 tests pass (offline) |
+| Whole suite | ✅ 192 tests pass (offline) |
 | Remaining | ⏳ real-data / GPU runs on owner machines; model validation |
 
 Nothing network- or GPU-dependent is "done" until an owner runs it on their
@@ -53,7 +54,7 @@ and no GPU).
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 191 tests, offline
+pytest            # 192 tests, offline
 ruff check .
 ```
 
