@@ -161,7 +161,59 @@ DTM_ARTIFACTS = notebook([
 ])
 
 
+# --------------------------------------------------------------------------- M5
+THERMAL = notebook([
+    md("# M5 — thermal emulator (Marswalk)\n\n"
+       "Trains a small MLP surrogate of the surface-temperature model "
+       "`physics.thermal.surface_temp_range_k` — fast (T_min, T_max) from "
+       "(thermal inertia, insolation, albedo). The underlying model is a C3 "
+       "**placeholder**; the emulator's realism is bounded by it — swap in a "
+       "validated thermal model and retrain for production.\n\n"
+       "**How to run:** **Run all** (CPU is fine), then send back "
+       "**`thermal_emulator_report.json`** and **`thermal_emulator_samples.png`**."),
+    code("!pip install -q \"git+" + REPO + "\"\n"
+         "import torch\n"
+         "dev = 'cuda' if torch.cuda.is_available() else 'cpu'\n"
+         "print('torch', torch.__version__, '| device', dev)"),
+    md("## Build data from the physics model, train, evaluate on a fresh draw"),
+    code("import json, time\n"
+         "import numpy as np\n"
+         "from marswalk.ml.thermal_emulator import build_dataset, train_mlp, evaluate\n"
+         "\n"
+         "Xtr, Ytr = build_dataset(4000, seed=0)\n"
+         "Xte, Yte = build_dataset(1000, seed=99)\n"
+         "t0 = time.time()\n"
+         "model = train_mlp(Xtr, Ytr, epochs=200, device=dev)\n"
+         "rep = evaluate(model, Xte, Yte)\n"
+         "secs = time.time() - t0\n"
+         "print(rep)"),
+    code("report = {**rep.as_dict(), 'device': (torch.cuda.get_device_name(0) if dev=='cuda' else 'CPU'),\n"
+         "          'epochs': 200, 'seconds': round(secs, 1), 'final_loss': round(model.history[-1], 6)}\n"
+         "with open('thermal_emulator_report.json', 'w') as f:\n"
+         "    json.dump(report, f, indent=2)\n"
+         "print(json.dumps(report, indent=2))"),
+    code("import matplotlib\n"
+         "matplotlib.use('Agg')\n"
+         "import matplotlib.pyplot as plt\n"
+         "pred = model.predict(Xte)\n"
+         "fig, ax = plt.subplots(1, 2, figsize=(11, 4.4))\n"
+         "for j, name in enumerate(['T_min', 'T_max']):\n"
+         "    ax[j].scatter(Yte[:, j], pred[:, j], s=5, alpha=.3, color='#e2572b')\n"
+         "    lo, hi = Yte[:, j].min(), Yte[:, j].max()\n"
+         "    ax[j].plot([lo, hi], [lo, hi], 'k--', lw=1)\n"
+         "    ax[j].set_xlabel(f'physics {name} (K)'); ax[j].set_ylabel(f'emulated {name} (K)')\n"
+         "    ax[j].set_title(name)\n"
+         "fig.suptitle(f\"thermal emulator — MAE T_max {rep.mae_tmax_k:.2f} K, T_min {rep.mae_tmin_k:.2f} K\")\n"
+         "fig.tight_layout(); fig.savefig('thermal_emulator_samples.png', dpi=120)\n"
+         "print('wrote thermal_emulator_samples.png')"),
+    md("## Send back\n\n"
+       "Download **`thermal_emulator_report.json`** and **`thermal_emulator_samples.png`** "
+       "and send them to the lead. Thanks!"),
+])
+
+
 if __name__ == "__main__":
     NB.mkdir(exist_ok=True)
     write(NB / "train_planner_heuristic.ipynb", HEURISTIC)
     write(NB / "train_dtm_artifacts.ipynb", DTM_ARTIFACTS)
+    write(NB / "train_thermal_emulator.ipynb", THERMAL)

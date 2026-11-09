@@ -32,7 +32,7 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **P2 ML** — annotation, spatial splits, detection metrics | ✅ offline; training pending (GPU) |
 | **Training notebook** — Faster R-CNN on **real BOULDERING data** (CC BY 4.0) | ✅ verified on real download (CPU); full GPU run owner-side |
 | **AI4Mars notebook** — DeepLabV3 terrain segmentation on **real AI4Mars** (CC BY 4.0) | ✅ verified on real patches (CPU); full GPU run owner-side |
-| **Model roadmap** — restored PRD v0.1 scope (6 trained + 1 optional); run-and-return notebooks | 🔄 M1 **training on the dev GTX 1650** (8-epoch run; 1.91 GB); M6 + M7 built & tested (notebooks); M3–M5 next ([docs/models.md](docs/models.md), [notebooks/README.md](notebooks/README.md)) |
+| **Model roadmap** — restored PRD v0.1 scope (6 trained + 1 optional); run-and-return notebooks | 🔄 M1 **training on the dev GTX 1650** (8-epoch run; 1.91 GB); M5 + M6 + M7 built & tested (notebooks); M3 + M4 next ([docs/models.md](docs/models.md), [notebooks/README.md](notebooks/README.md)) |
 | **P3/P5 API + web** — FastAPI (/routes /probe) + React map | ✅ offline; verified in-browser |
 | **`marswalk` CLI** — end-to-end mission report (3-route + walk-back + stability) | ✅ offline; drives real modules |
 | **Demo figure** — 3-panel render (routes + walk-back field + stability map) | ✅ offline ([docs/cli.md](docs/cli.md)) |

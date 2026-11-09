@@ -49,6 +49,8 @@ you read and run the code.
 
 | 2026-11-09 | Claude (Opus 4.8) | M6 DTM-artifact detector: `ml/dtm_artifacts.py` (hillshade patches, injected box-step/CCD-seam labels, small CNN) + 2 tests (`test_dtm_artifacts.py`) + `notebooks/train_dtm_artifacts.ipynb` | _pending (P1/P2)_ | Offline, tested (CPU). Honest weak supervision — artifacts are injected into clean DEMs, so labels are synthetic by construction; the CNN generalizes to **unseen terrains** (held-out acc > 0.75). Flags suspect tiles for the C2 DEM error model. Friend-runnable. |
 
+| 2026-11-09 | Claude (Opus 4.8) | M5 thermal emulator: `ml/thermal_emulator.py` (MLP surrogate of `physics.thermal.surface_temp_range_k`) + 2 tests (`test_thermal_emulator.py`) + `notebooks/train_thermal_emulator.ipynb` | _pending (P4/P2)_ | Offline, tested (CPU). Surrogate reproduces the real thermal model within a few K on a held-out draw (MAE T_max < 4 K). The underlying thermal model is a C3 **placeholder** — the emulator's realism is bounded by it; swap a validated (KRC/MEDA) model and retrain. Friend-runnable. |
+
 ## How to keep this honest
 
 - Add a row when the AI produces or substantially rewrites a module.
