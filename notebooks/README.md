@@ -33,13 +33,25 @@ Send **both** to the lead (Rudresh), plus a one-line note of your GPU name (the
 notebook prints it) and whether anything errored. That's it — the lead hands
 them to the build and the model goes from "untested" to "verified on real data".
 
-## The notebooks
+## Who runs what (team laptops)
 
-| Notebook | Model | Dataset (auto-download) | Rough time on a T4 |
+All seven are now **upload to Colab → Run all** (M1 auto-installs the repo; M2
+needs only torch + its dataset; M3–M7 auto-install). Suggested assignment by
+hardware:
+
+| Notebook | Model | Assigned laptop | Needs before running |
 |---|---|---|---|
-| `train_rock_detector.ipynb` | M1 rock detector | BOULDERING, ~265 MB | 15–40 min |
-| `train_ai4mars_terrain.ipynb` | M2 surface classifier | AI4Mars, ~16 GB | 1–3 h |
-| *(more models being added — see [`docs/models.md`](../docs/models.md))* | M3–M7 | mostly self-contained | minutes–tens of min |
+| `train_rock_detector.ipynb` | M1 rock detector | **Dev GTX 1650** (running now) — or HP Victus RTX 4050 for a longer run | CUDA GPU ≥4 GB · ~2 GB free disk |
+| `train_ai4mars_terrain.ipynb` | M2 surface classifier | **HP Victus — RTX 4050 6 GB** | CUDA GPU (6 GB best) · **~20 GB free disk** · 1–3 h |
+| `train_dtm_artifacts.ipynb` | M6 DTM-artifact CNN | **ASUS Zephyrus G14 — RTX 3050 Ti** | GPU (or CPU) · <0.5 GB disk |
+| `train_traversability.ipynb` | M3 traversability | **MacBook Air (M4 chip)** | Python 3.10–3.12 + internet (or Colab) |
+| `train_dose_regression.ipynb` | M4 dose regression | **MacBook Air (M4 chip)** | Python + internet (or Colab) |
+| `train_thermal_emulator.ipynb` | M5 thermal emulator | **MacBook Air (M5 chip)** | Python + internet (or Colab) |
+| `train_planner_heuristic.ipynb` | M7 learned heuristic | **MacBook Air (M5 chip)** | Python + internet (or Colab) |
+
+The MacBooks run their four light notebooks on CPU in minutes (no CUDA needed).
+Anyone stuck on a local CUDA install should just use **Colab with a GPU runtime**
+— it avoids the CPU-vs-CUDA PyTorch problem entirely.
 
 ## Honesty / provenance
 
