@@ -44,6 +44,9 @@ you read and run the code.
 
 | 2026-11-09 | Claude (Opus 4.8) | M7 learned planner heuristic: `ml/heuristic.py` (planner-generated dataset, MLP cost-to-go, admissibility + baseline report) + 3 tests (`test_heuristic.py`) | _pending (P2/P3)_ | Offline, tested (CPU). Self-contained — targets are exact planner computations (`time_to_haven_field`); the learned heuristic beats the straight-line lower bound while staying ~99% admissible (pred ≤ truth). Friend-runnable notebook still PENDING. |
 
+| 2026-11-09 | Claude (Opus 4.8) | M1 rock-detector GPU training: `scripts/train_rock_detector.py` (torchvision Faster R-CNN on real BOULDERING; COCO-pretrained, head-swapped to 2 classes; AMP, 4 GB-tuned; JSON report + sample PNG) — verified end-to-end on the dev GTX 1650 | _pending (P2)_ | Real run on 953 patches / 39,378 boxes (755/198 split, all bodies). 1-epoch smoke: peak VRAM **1.91 GB**, ~10 min/epoch, OVERALL **P 0.48 / R 0.33 / F1 0.39** (IoU 0.5). Patches are non-georeferenced → size bins are PIXELS, not metres (the ≥1.5 m gate needs GSD). Full multi-epoch run pending. |
+| 2026-11-09 | Claude (Opus 4.8) | Friend-runnable notebooks: `scripts/make_ml_notebooks.py` generator + `notebooks/train_planner_heuristic.ipynb` (M7; pip-installs the repo from GitHub, trains, writes `heuristic_report.json` + `heuristic_samples.png`) | _pending (P2/P3)_ | Offline. Wraps the tested `ml.heuristic`. Run-and-return format per `notebooks/README.md`. |
+
 ## How to keep this honest
 
 - Add a row when the AI produces or substantially rewrites a module.

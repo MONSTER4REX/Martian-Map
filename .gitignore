@@ -19,6 +19,7 @@ dist/
 venv/
 .venv-gpu/
 .gpu-build/
+runs/
 env/
 .pytest_cache/
 .ruff_cache/
