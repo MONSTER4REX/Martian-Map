@@ -42,6 +42,8 @@ you read and run the code.
 
 | 2026-11-09 | Claude (Opus 4.8) | Model roadmap restore (lead decision): `docs/models.md` (6 trained + 1 optional, honest per-model data/status/gates) + `notebooks/README.md` (friend run-and-return guide) + GPU training env (`.venv-gpu`, CUDA torch for the GTX 1650) | _pending (P2)_ | Scope restored from PRD v0.1 at the lead's direction (v0.2 had trimmed to 1 core + 1 gated). M1/M2 on real public labels; M5/M6/M7 self-contained/real-mechanism; M3 synthetic-traverse until rover waypoints wired; M4 inputs PLACEHOLDER pending cited RAD. No metric is printed that was not computed by a run. |
 
+| 2026-11-09 | Claude (Opus 4.8) | M7 learned planner heuristic: `ml/heuristic.py` (planner-generated dataset, MLP cost-to-go, admissibility + baseline report) + 3 tests (`test_heuristic.py`) | _pending (P2/P3)_ | Offline, tested (CPU). Self-contained — targets are exact planner computations (`time_to_haven_field`); the learned heuristic beats the straight-line lower bound while staying ~99% admissible (pred ≤ truth). Friend-runnable notebook still PENDING. |
+
 ## How to keep this honest
 
 - Add a row when the AI produces or substantially rewrites a module.
