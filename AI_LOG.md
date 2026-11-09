@@ -51,6 +51,9 @@ you read and run the code.
 
 | 2026-11-09 | Claude (Opus 4.8) | M5 thermal emulator: `ml/thermal_emulator.py` (MLP surrogate of `physics.thermal.surface_temp_range_k`) + 2 tests (`test_thermal_emulator.py`) + `notebooks/train_thermal_emulator.ipynb` | _pending (P4/P2)_ | Offline, tested (CPU). Surrogate reproduces the real thermal model within a few K on a held-out draw (MAE T_max < 4 K). The underlying thermal model is a C3 **placeholder** — the emulator's realism is bounded by it; swap a validated (KRC/MEDA) model and retrain. Friend-runnable. |
 
+| 2026-11-09 | Claude (Opus 4.8) | M3 traversability (PU-learning): `ml/traversability.py` (slope/roughness features, positive-unlabeled MLP, ROC-AUC) + 3 tests (`test_traversability.py`) + `notebooks/train_traversability.ipynb` | _pending (P2/P3)_ | Offline, tested (CPU). Recovers held-out TRUE traversability from positives only (ROC-AUC > 0.85) on unseen terrain. The rover traverse is **synthetic** — real Perseverance/Curiosity waypoints + the DEM drop into the same code. |
+| 2026-11-09 | Claude (Opus 4.8) | M4 dose regression: `ml/dose_regression.py` (log-space surrogate of `radiation.dose_usv`) + 2 tests (`test_dose_regression.py`) + `notebooks/train_dose_regression.ipynb` | _pending (P4/P2)_ | Offline, tested (CPU). Within ~5% of the real model on a held-out draw. The dose model is a C4 **placeholder**; its rate/attenuation await **cited RAD figures**. |
+
 ## How to keep this honest
 
 - Add a row when the AI produces or substantially rewrites a module.

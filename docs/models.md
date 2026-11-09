@@ -29,11 +29,11 @@ batch 2–4, gradient accumulation, `channels_last`, AMP. Pre-cut tiles once.
 |---|---|---|---|---|
 | **M1** | **Rock detector** (Faster R-CNN) | BOULDERING — Zenodo 8171052, CC BY 4.0 | notebook ✅; **training on the 1650 now** | yes (small) |
 | **M2** | **Surface classifier** (DeepLabV3) | AI4Mars — Zenodo 15995036, CC BY 4.0 | notebook ✅ (verified-run); needs 16 GB + GPU | tight |
-| **M3** | **Traversability** (PU-learning) | rover traverse mask + DEM/terrain features | notebook ⏳ | yes |
-| **M4** | **Dose regression** | MSL/RAD reference + shielding geometry | notebook ⏳; data thin — inputs marked | yes |
-| **M5** | **Thermal emulator** (surrogate NN) | trained on the physics thermal model's own outputs | notebook ⏳ | yes |
-| **M6** | **DTM-artifact CNN** | HiRISE hillshade; labels by injected box-step/CCD-seam artifacts | notebook ⏳ | yes |
-| **M7** | **Learned planner heuristic** (optional) | self-generated: A* cost-to-go on many terrains | notebook ⏳ | yes (CPU ok) |
+| **M3** | **Traversability** (PU-learning) | rover traverse mask + DEM/terrain features | ✅ module + tests + notebook (CPU-verified) | yes |
+| **M4** | **Dose regression** | MSL/RAD reference + shielding geometry | ✅ module + tests + notebook (CPU-verified); data thin — inputs marked | yes |
+| **M5** | **Thermal emulator** (surrogate NN) | trained on the physics thermal model's own outputs | ✅ module + tests + notebook (CPU-verified) | yes |
+| **M6** | **DTM-artifact CNN** | HiRISE hillshade; labels by injected box-step/CCD-seam artifacts | ✅ module + tests + notebook (CPU-verified) | yes |
+| **M7** | **Learned planner heuristic** (optional) | self-generated: A* cost-to-go on many terrains | ✅ module + tests + notebook (CPU-verified) | yes (CPU ok) |
 
 **Honesty flags.** M1/M2 train on real public labels. M5/M6/M7 are
 self-contained and *real in mechanism* — M5 emulates our own physics model, M6

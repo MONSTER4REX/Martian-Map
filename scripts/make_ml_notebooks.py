@@ -212,8 +212,108 @@ THERMAL = notebook([
 ])
 
 
+# --------------------------------------------------------------------------- M3
+TRAVERSABILITY = notebook([
+    md("# M3 — traversability (PU-learning) (Marswalk)\n\n"
+       "Learns a per-cell **traversability** score from a rover's drive using "
+       "Positive-Unlabeled learning: the cells the rover crossed are positive, "
+       "everywhere else is unlabeled. Here the traverse is **synthetic** (a subset "
+       "of truly traversable cells) so it runs offline; wire real Perseverance / "
+       "Curiosity waypoints and the same code learns from real drives.\n\n"
+       "**How to run:** **Run all**, then send back "
+       "**`traversability_report.json`** and **`traversability_samples.png`**."),
+    code("!pip install -q \"git+" + REPO + "\"\n"
+         "import torch\n"
+         "dev = 'cuda' if torch.cuda.is_available() else 'cpu'\n"
+         "print('torch', torch.__version__, '| device', dev)"),
+    md("## Train on positives+unlabeled, score held-out terrain (ROC-AUC vs truth)"),
+    code("import json, time\n"
+         "import numpy as np\n"
+         "from marswalk.ml.traversability import make_pu_dataset, train_pu, evaluate\n"
+         "\n"
+         "Xtr, str_, ytr = make_pu_dataset(range(16))\n"
+         "Xte, ste, yte = make_pu_dataset(range(200, 206))\n"
+         "t0 = time.time()\n"
+         "model = train_pu(Xtr, str_, epochs=80, device=dev)\n"
+         "rep = evaluate(model, Xte, ste, yte)\n"
+         "secs = time.time() - t0\n"
+         "print(rep)"),
+    code("report = {**rep.as_dict(), 'device': (torch.cuda.get_device_name(0) if dev=='cuda' else 'CPU'),\n"
+         "          'epochs': 80, 'seconds': round(secs, 1)}\n"
+         "with open('traversability_report.json', 'w') as f:\n"
+         "    json.dump(report, f, indent=2)\n"
+         "print(json.dumps(report, indent=2))"),
+    code("import matplotlib\n"
+         "matplotlib.use('Agg')\n"
+         "import matplotlib.pyplot as plt\n"
+         "Xo, so, yo = make_pu_dataset(range(300, 301))   # one unseen terrain\n"
+         "score = model.score(Xo).reshape(40, 40)\n"
+         "fig, ax = plt.subplots(1, 2, figsize=(10, 4.6))\n"
+         "ax[0].imshow(yo.reshape(40, 40), cmap='Greens'); ax[0].set_title('true traversable')\n"
+         "im = ax[1].imshow(score, cmap='Greens', vmin=0, vmax=1); ax[1].set_title('PU score')\n"
+         "for a in ax: a.set_xticks([]); a.set_yticks([])\n"
+         "fig.colorbar(im, ax=ax, fraction=0.025)\n"
+         "fig.suptitle(f\"traversability from a synthetic traverse — ROC-AUC {rep.roc_auc:.3f}\")\n"
+         "fig.savefig('traversability_samples.png', dpi=120, bbox_inches='tight')\n"
+         "print('wrote traversability_samples.png')"),
+    md("## Send back\n\n"
+       "Download **`traversability_report.json`** and **`traversability_samples.png`** "
+       "and send them to the lead. Thanks!"),
+])
+
+# --------------------------------------------------------------------------- M4
+DOSE = notebook([
+    md("# M4 — radiation dose regression (Marswalk)\n\n"
+       "Trains a surrogate of the C4 dose model `radiation.dose_usv` — dose (uSv) "
+       "from (duration, shielding, surface rate, attenuation). The dose model is a "
+       "**placeholder** and its rate/attenuation await **cited RAD figures**; the "
+       "regression is faithful to that model, learned in log space.\n\n"
+       "**How to run:** **Run all**, then send back "
+       "**`dose_regression_report.json`** and **`dose_regression_samples.png`**."),
+    code("!pip install -q \"git+" + REPO + "\"\n"
+         "import torch\n"
+         "dev = 'cuda' if torch.cuda.is_available() else 'cpu'\n"
+         "print('torch', torch.__version__, '| device', dev)"),
+    md("## Build data from the dose model, train, evaluate on a fresh draw"),
+    code("import json, time\n"
+         "import numpy as np\n"
+         "from marswalk.ml.dose_regression import build_dataset, train_mlp, evaluate\n"
+         "\n"
+         "Xtr, ytr = build_dataset(5000, seed=0)\n"
+         "Xte, yte = build_dataset(1000, seed=123)\n"
+         "t0 = time.time()\n"
+         "model = train_mlp(Xtr, ytr, epochs=200, device=dev)\n"
+         "rep = evaluate(model, Xte, yte)\n"
+         "secs = time.time() - t0\n"
+         "print(rep)"),
+    code("report = {**rep.as_dict(), 'device': (torch.cuda.get_device_name(0) if dev=='cuda' else 'CPU'),\n"
+         "          'epochs': 200, 'seconds': round(secs, 1)}\n"
+         "with open('dose_regression_report.json', 'w') as f:\n"
+         "    json.dump(report, f, indent=2)\n"
+         "print(json.dumps(report, indent=2))"),
+    code("import matplotlib\n"
+         "matplotlib.use('Agg')\n"
+         "import matplotlib.pyplot as plt\n"
+         "pred = model.predict(Xte)\n"
+         "fig, ax = plt.subplots(figsize=(5.2, 5))\n"
+         "ax.scatter(yte, pred, s=5, alpha=.3, color='#e2572b')\n"
+         "lo, hi = max(yte.min(), 1e-2), yte.max()\n"
+         "ax.plot([lo, hi], [lo, hi], 'k--', lw=1)\n"
+         "ax.set_xscale('log'); ax.set_yscale('log')\n"
+         "ax.set_xlabel('physics dose (uSv)'); ax.set_ylabel('predicted dose (uSv)')\n"
+         "ax.set_title(f\"dose surrogate — median rel err {rep.median_rel_err*100:.1f}%\")\n"
+         "fig.tight_layout(); fig.savefig('dose_regression_samples.png', dpi=120)\n"
+         "print('wrote dose_regression_samples.png')"),
+    md("## Send back\n\n"
+       "Download **`dose_regression_report.json`** and **`dose_regression_samples.png`** "
+       "and send them to the lead. Thanks!"),
+])
+
+
 if __name__ == "__main__":
     NB.mkdir(exist_ok=True)
     write(NB / "train_planner_heuristic.ipynb", HEURISTIC)
     write(NB / "train_dtm_artifacts.ipynb", DTM_ARTIFACTS)
     write(NB / "train_thermal_emulator.ipynb", THERMAL)
+    write(NB / "train_traversability.ipynb", TRAVERSABILITY)
+    write(NB / "train_dose_regression.ipynb", DOSE)
