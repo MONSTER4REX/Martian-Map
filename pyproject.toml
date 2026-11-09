@@ -52,9 +52,16 @@ pythonpath = ["src"]
 line-length = 100
 src = ["src", "tests"]
 target-version = "py311"
+# Lint the shipped package + tests strictly; notebooks (Colab deliverables) and
+# one-off scripts/demos are not part of the library's lint surface.
+extend-exclude = ["notebooks", "scripts"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "W"]
+# Compact multi-statement lines (`a; b`) are used deliberately in demos/ML code;
+# (str, Enum) is valid on py311 (StrEnum modernization optional). Correctness
+# rules (F, B, imports, line-length) stay strict.
+ignore = ["E701", "E702", "UP042"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["marswalk"]

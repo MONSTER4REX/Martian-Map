@@ -29,7 +29,9 @@ class WindowSpec:
     height: int
 
 
-def bounds_to_window(transform: AffineTuple, bounds: tuple[float, float, float, float]) -> WindowSpec:
+def bounds_to_window(
+    transform: AffineTuple, bounds: tuple[float, float, float, float]
+) -> WindowSpec:
     """Pixel window covering a map-coordinate bbox, for a north-up transform.
 
     `transform` is GDAL-order (a, b, c, d, e, f) with b == d == 0 (north-up).

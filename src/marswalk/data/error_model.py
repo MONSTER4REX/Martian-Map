@@ -27,7 +27,9 @@ class DEMErrorModel(BaseModel):
     nugget_m2: float = Field(default=0.0, ge=0)  # white variance (m^2)
 
 
-def _gaussian_field(shape: tuple[int, int], sigma_cells: float, rng: np.random.Generator) -> np.ndarray:
+def _gaussian_field(
+    shape: tuple[int, int], sigma_cells: float, rng: np.random.Generator
+) -> np.ndarray:
     """Unit-variance, zero-mean Gaussian random field with correlation length
     ~ sigma_cells (FFT convolution of white noise with a Gaussian kernel)."""
     white = rng.standard_normal(shape)

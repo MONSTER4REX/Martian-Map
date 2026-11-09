@@ -43,7 +43,6 @@ def run_dtm_qa(
     step_edge. Thresholds are placeholders in DEM units."""
     z = grid.elevation
     nodata = ~np.isfinite(z)
-    n = z.size
 
     slope = slope_degrees(grid)
     slope_spike = np.isfinite(slope) & (slope > slope_spike_deg)

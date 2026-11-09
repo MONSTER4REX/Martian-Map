@@ -56,7 +56,9 @@ class WalkbackReport(BaseModel):
     reason: str
 
 
-def _allowed_time_edges(grid: Grid, pcfg: PlannerConfig, loco: LocomotionParams, speed_scale: float):
+def _allowed_time_edges(
+    grid: Grid, pcfg: PlannerConfig, loco: LocomotionParams, speed_scale: float
+):
     """Yield (a, b, traverse_time_s) for every edge allowed under HARD exclusions."""
     g_col, g_row = terrain_gradient(grid)
     offsets = neighbor_offsets(pcfg.connectivity)

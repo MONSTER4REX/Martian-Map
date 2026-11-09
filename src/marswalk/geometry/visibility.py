@@ -53,7 +53,8 @@ def _terrain_z_at(grid: Grid, x: float, y: float) -> float:
 
 
 def _in_footprint(grid: Grid, x: float, y: float) -> bool:
-    return 0.0 <= x <= (grid.ncols - 1) * grid.cellsize and 0.0 <= y <= (grid.nrows - 1) * grid.cellsize
+    return (0.0 <= x <= (grid.ncols - 1) * grid.cellsize
+            and 0.0 <= y <= (grid.nrows - 1) * grid.cellsize)
 
 
 def line_of_sight(
