@@ -106,6 +106,62 @@ HEURISTIC = notebook([
 ])
 
 
+# --------------------------------------------------------------------------- M6
+DTM_ARTIFACTS = notebook([
+    md("# M6 — DTM artifact detector (Marswalk)\n\n"
+       "Trains a small CNN to flag **DEM/DTM artifacts** — box-steps and CCD-seam "
+       "lines — from hillshade. Labels are made by injecting artifacts of known "
+       "type into clean synthetic DEMs (honest weak supervision); you then run the "
+       "detector over real HiRISE DTM hillshades to flag suspect tiles.\n\n"
+       "**How to run:** Runtime → GPU (optional), **Run all**, then send back "
+       "**`dtm_artifacts_report.json`** and **`dtm_artifacts_samples.png`**."),
+    code("!pip install -q \"git+" + REPO + "\"\n"
+         "import torch\n"
+         "dev = 'cuda' if torch.cuda.is_available() else 'cpu'\n"
+         "print('torch', torch.__version__, '| device', dev,\n"
+         "      '|', torch.cuda.get_device_name(0) if dev=='cuda' else 'CPU')"),
+    md("## Build labelled patches, train, evaluate on unseen terrain\n\n"
+       "Train and test terrains are disjoint, so the score reflects generalization, "
+       "not memorized texture."),
+    code("import json, time\n"
+         "import numpy as np\n"
+         "from marswalk.ml.dtm_artifacts import make_dataset, train_cnn, evaluate\n"
+         "\n"
+         "Xtr, ytr = make_dataset(range(60), per_terrain=16, step_frac=0.25)\n"
+         "Xte, yte = make_dataset(range(1000, 1012), per_terrain=16, step_frac=0.25)\n"
+         "print(f'train {len(Xtr)} patches | test {len(Xte)} (disjoint terrains)')\n"
+         "t0 = time.time()\n"
+         "model = train_cnn(Xtr, ytr, epochs=30, device=dev)\n"
+         "rep = evaluate(model, Xte, yte)\n"
+         "secs = time.time() - t0\n"
+         "print(rep)"),
+    code("report = {**rep.as_dict(), 'device': (torch.cuda.get_device_name(0) if dev=='cuda' else 'CPU'),\n"
+         "          'epochs': 30, 'seconds': round(secs, 1), 'final_loss': round(model.history[-1], 5)}\n"
+         "with open('dtm_artifacts_report.json', 'w') as f:\n"
+         "    json.dump(report, f, indent=2)\n"
+         "print(json.dumps(report, indent=2))"),
+    code("import matplotlib\n"
+         "matplotlib.use('Agg')\n"
+         "import matplotlib.pyplot as plt\n"
+         "pred = model.predict(Xte)\n"
+         "lab = {0: 'clean', 1: 'artifact'}\n"
+         "idx = np.random.default_rng(1).choice(len(Xte), size=8, replace=False)\n"
+         "fig, ax = plt.subplots(2, 4, figsize=(11, 6))\n"
+         "for a, i in zip(ax.ravel(), idx):\n"
+         "    a.imshow(Xte[i, 0], cmap='gray'); a.set_xticks([]); a.set_yticks([])\n"
+         "    ok = pred[i] == yte[i]\n"
+         "    a.set_title(f\"GT {lab[yte[i]]} / pred {lab[pred[i]]}\",\n"
+         "                color=('green' if ok else 'red'), fontsize=9)\n"
+         "fig.suptitle(f\"DTM artifact detector — test acc {rep.accuracy*100:.1f}%, F1 {rep.f1:.2f}\")\n"
+         "fig.tight_layout(); fig.savefig('dtm_artifacts_samples.png', dpi=120)\n"
+         "print('wrote dtm_artifacts_samples.png')"),
+    md("## Send back\n\n"
+       "Download **`dtm_artifacts_report.json`** and **`dtm_artifacts_samples.png`** "
+       "and send them to the lead, plus your GPU name. Thanks!"),
+])
+
+
 if __name__ == "__main__":
     NB.mkdir(exist_ok=True)
     write(NB / "train_planner_heuristic.ipynb", HEURISTIC)
+    write(NB / "train_dtm_artifacts.ipynb", DTM_ARTIFACTS)

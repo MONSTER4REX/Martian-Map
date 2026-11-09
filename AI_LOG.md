@@ -47,6 +47,8 @@ you read and run the code.
 | 2026-11-09 | Claude (Opus 4.8) | M1 rock-detector GPU training: `scripts/train_rock_detector.py` (torchvision Faster R-CNN on real BOULDERING; COCO-pretrained, head-swapped to 2 classes; AMP, 4 GB-tuned; JSON report + sample PNG) — verified end-to-end on the dev GTX 1650 | _pending (P2)_ | Real run on 953 patches / 39,378 boxes (755/198 split, all bodies). 1-epoch smoke: peak VRAM **1.91 GB**, ~10 min/epoch, OVERALL **P 0.48 / R 0.33 / F1 0.39** (IoU 0.5). Patches are non-georeferenced → size bins are PIXELS, not metres (the ≥1.5 m gate needs GSD). Full multi-epoch run pending. |
 | 2026-11-09 | Claude (Opus 4.8) | Friend-runnable notebooks: `scripts/make_ml_notebooks.py` generator + `notebooks/train_planner_heuristic.ipynb` (M7; pip-installs the repo from GitHub, trains, writes `heuristic_report.json` + `heuristic_samples.png`) | _pending (P2/P3)_ | Offline. Wraps the tested `ml.heuristic`. Run-and-return format per `notebooks/README.md`. |
 
+| 2026-11-09 | Claude (Opus 4.8) | M6 DTM-artifact detector: `ml/dtm_artifacts.py` (hillshade patches, injected box-step/CCD-seam labels, small CNN) + 2 tests (`test_dtm_artifacts.py`) + `notebooks/train_dtm_artifacts.ipynb` | _pending (P1/P2)_ | Offline, tested (CPU). Honest weak supervision — artifacts are injected into clean DEMs, so labels are synthetic by construction; the CNN generalizes to **unseen terrains** (held-out acc > 0.75). Flags suspect tiles for the C2 DEM error model. Friend-runnable. |
+
 ## How to keep this honest
 
 - Add a row when the AI produces or substantially rewrites a module.
