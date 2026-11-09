@@ -21,6 +21,7 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **P4 EVA physics** (locomotion, consumables, **walk-back** gate) | ✅ offline, placeholder params; **UNTESTED ON REAL DATA** |
 | **Walk-back wired into planner** (mission constraint, step 4) | ✅ offline; gate satisfied → step 5 unlocked |
 | **Survival envelope** (no-go/death zones; collapses under rover-loss) | ✅ offline; the hero visual ([docs/survival.md](docs/survival.md)) |
+| **Interactive survival console** (click a point → SAFE/FATAL, live) | ✅ offline; the judge-facing demo ([docs/demo.md](docs/demo.md)) |
 | **Step 5: multi-objective NAMOA\*** (Pareto on a corridor) | ✅ offline; exact front, validated vs Dijkstra |
 | **Step 6: time-windowed orienteering** (science under walk-back) | ✅ offline; exact subset DP |
 | **P1 data (offline)** — DEM derivatives, DTM QA (C1), DEM error ensembles (C2) | ✅ offline; network parts pending |
@@ -35,7 +36,7 @@ truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 | **`marswalk` CLI** — end-to-end mission report (3-route + walk-back + stability) | ✅ offline; drives real modules |
 | **Demo figure** — 3-panel render (routes + walk-back field + stability map) | ✅ offline ([docs/cli.md](docs/cli.md)) |
 | **C3/C4/C6 screening** — thermal / radiation / slip (placeholders) | ✅ offline; validate vs MEDA / rover cases |
-| Whole suite | ✅ 205 tests pass (offline) |
+| Whole suite | ✅ 208 tests pass (offline) |
 | Remaining | ⏳ real-data / GPU runs on owner machines; model validation |
 
 Nothing network- or GPU-dependent is "done" until an owner runs it on their
@@ -58,7 +59,7 @@ and no GPU).
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 205 tests, offline
+pytest            # 208 tests, offline
 ruff check .
 ```
 
