@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Marswalk</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,6 +30,16 @@
   a{color:var(--amber);text-decoration:none;border-bottom:1px solid rgba(255,157,77,.35)}
   a:hover{color:var(--fg)}
   .stack{display:flex;flex-direction:column;gap:18px}
+  .cta{display:inline-flex;gap:9px;align-items:center;font-family:var(--display);font-weight:700;font-size:16px;
+    letter-spacing:.3px;color:#160a05;background:linear-gradient(180deg,#ff8a4d,var(--rust));
+    border:0;border-radius:11px;padding:13px 22px;width:max-content;
+    box-shadow:0 6px 22px rgba(226,87,43,.35);transition:transform .12s,box-shadow .2s}
+  .cta:hover{color:#160a05;transform:translateY(-1px);box-shadow:0 9px 30px rgba(226,87,43,.5)}
+  .cta .ar{font-size:13px}
+  .cta.ghost{background:none;color:var(--amber);border:1px solid var(--line);box-shadow:none}
+  .cta.ghost:hover{color:var(--fg);border-color:var(--amber);box-shadow:none}
+  .ctarow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .ctarow .micro{font-family:var(--mono);font-size:12px;color:var(--faint)}
 
   /* hero */
   .hero{padding-block:clamp(56px,9vw,104px)}
@@ -95,6 +106,10 @@
         <h1 class="brand">MARS<span class="k">WALK</span></h1>
         <p class="tagline">The Mars EVA planner that draws the line you can't cross — and keeps you on the right side of it.</p>
         <p class="lede">An astronaut on foot has a few hours of oxygen. Cross one invisible line and you can no longer walk back to safety before it runs out. Marswalk finds that line everywhere on the map, and routes so you never cross it.</p>
+        <div class="ctarow">
+          <a class="cta" href="https://claude.ai/artifact/BBsEB6amC1y74boN4ryrA9"><span class="ar">▶</span>Try the live survival console</a>
+          <span class="micro">click any point → SAFE or FATAL, instantly</span>
+        </div>
       </div>
       <div class="readout" id="readout" aria-live="polite">
         <div class="scn" id="scn">NOMINAL</div>
@@ -136,6 +151,9 @@
       <img src="survival_envelope.png" alt="Three maps of the survivable area shrinking from 80% to 47% to 7% under nominal, rover-lost and suit-degraded contingencies">
       <figcaption>Green = you can get back (shaded by spare time). Dark red = no-go. Nominal 80% → rover lost 47% → suit degraded 7%.</figcaption>
     </figure>
+    <div class="ctarow">
+      <a class="cta ghost" href="https://claude.ai/artifact/BBsEB6amC1y74boN4ryrA9"><span class="ar">▶</span>Explore this map yourself — move the cursor, flip the contingency</a>
+    </div>
   </section>
 
   <!-- HOW IT WORKS -->
