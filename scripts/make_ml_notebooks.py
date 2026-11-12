@@ -99,7 +99,7 @@ HEURISTIC = notebook([
          "ax[1].plot(np.array(model.history)); ax[1].set_xlabel('epoch'); ax[1].set_ylabel('loss')\n"
          "ax[1].set_title('training loss')\n"
          "fig.tight_layout(); fig.savefig('heuristic_samples.png', dpi=120)\n"
-         "print('wrote heuristic_samples.png')"),
+         "import os; print('SAVED (download these):', os.path.abspath('heuristic_samples.png'), '|', os.path.abspath('heuristic_report.json'))"),
     md("## Send back\n\n"
        "Download **`heuristic_report.json`** and **`heuristic_samples.png`** and send "
        "them to the lead, plus your GPU name (printed above). Thanks!"),
@@ -154,7 +154,7 @@ DTM_ARTIFACTS = notebook([
          "                color=('green' if ok else 'red'), fontsize=9)\n"
          "fig.suptitle(f\"DTM artifact detector — test acc {rep.accuracy*100:.1f}%, F1 {rep.f1:.2f}\")\n"
          "fig.tight_layout(); fig.savefig('dtm_artifacts_samples.png', dpi=120)\n"
-         "print('wrote dtm_artifacts_samples.png')"),
+         "import os; print('SAVED (download these):', os.path.abspath('dtm_artifacts_samples.png'), '|', os.path.abspath('dtm_artifacts_report.json'))"),
     md("## Send back\n\n"
        "Download **`dtm_artifacts_report.json`** and **`dtm_artifacts_samples.png`** "
        "and send them to the lead, plus your GPU name. Thanks!"),
@@ -205,7 +205,7 @@ THERMAL = notebook([
          "    ax[j].set_title(name)\n"
          "fig.suptitle(f\"thermal emulator — MAE T_max {rep.mae_tmax_k:.2f} K, T_min {rep.mae_tmin_k:.2f} K\")\n"
          "fig.tight_layout(); fig.savefig('thermal_emulator_samples.png', dpi=120)\n"
-         "print('wrote thermal_emulator_samples.png')"),
+         "import os; print('SAVED (download these):', os.path.abspath('thermal_emulator_samples.png'), '|', os.path.abspath('thermal_emulator_report.json'))"),
     md("## Send back\n\n"
        "Download **`thermal_emulator_report.json`** and **`thermal_emulator_samples.png`** "
        "and send them to the lead. Thanks!"),
@@ -255,7 +255,7 @@ TRAVERSABILITY = notebook([
          "fig.colorbar(im, ax=ax, fraction=0.025)\n"
          "fig.suptitle(f\"traversability from a synthetic traverse — ROC-AUC {rep.roc_auc:.3f}\")\n"
          "fig.savefig('traversability_samples.png', dpi=120, bbox_inches='tight')\n"
-         "print('wrote traversability_samples.png')"),
+         "import os; print('SAVED (download these):', os.path.abspath('traversability_samples.png'), '|', os.path.abspath('traversability_report.json'))"),
     md("## Send back\n\n"
        "Download **`traversability_report.json`** and **`traversability_samples.png`** "
        "and send them to the lead. Thanks!"),
@@ -303,7 +303,7 @@ DOSE = notebook([
          "ax.set_xlabel('physics dose (uSv)'); ax.set_ylabel('predicted dose (uSv)')\n"
          "ax.set_title(f\"dose surrogate — median rel err {rep.median_rel_err*100:.1f}%\")\n"
          "fig.tight_layout(); fig.savefig('dose_regression_samples.png', dpi=120)\n"
-         "print('wrote dose_regression_samples.png')"),
+         "import os; print('SAVED (download these):', os.path.abspath('dose_regression_samples.png'), '|', os.path.abspath('dose_regression_report.json'))"),
     md("## Send back\n\n"
        "Download **`dose_regression_report.json`** and **`dose_regression_samples.png`** "
        "and send them to the lead. Thanks!"),

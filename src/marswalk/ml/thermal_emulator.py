@@ -92,7 +92,7 @@ def train_mlp(X, Y, epochs: int = 200, lr: float = 2e-3, device: str = "cpu",
             opt.zero_grad()
             loss = lossf(net(Xt[idx]), Yt[idx])
             loss.backward(); opt.step()
-            tot += float(loss) * len(idx)
+            tot += loss.item() * len(idx)
         history.append(tot / n)
     net.eval()
     m = ThermalEmulator(x_mean=x_mean, x_std=x_std, y_mean=y_mean, y_std=y_std,

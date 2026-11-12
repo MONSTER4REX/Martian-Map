@@ -44,6 +44,24 @@ a documented synthetic traverse, clearly marked. M4 has the weakest public
 dataset; its pipeline is real but its inputs are **placeholders** pending cited
 RAD figures. Nothing prints a number we did not compute.
 
+## Verified results (real runs)
+
+From actual runs (never hand-entered); more arrive as friends return their
+notebooks (see [`notebooks/README.md`](../notebooks/README.md)).
+
+| Model | Metric | Result | Where |
+|---|---|---|---|
+| **M1** rock detector | F1 @ IoU 0.5 (pixel-space) | **0.48** (P 0.65 / R 0.38), 8 epochs | dev GTX 1650 |
+| **M3** traversability | ROC-AUC, held-out terrain | **~1.000** | CPU |
+| **M4** dose regression | median rel. error | **1.0%** (MAE 0.53 µSv) | CPU |
+| **M5** thermal emulator | MAE T_max / T_min | **0.26 K / 0.25 K** (max 1.9 K) | CPU |
+| **M6** DTM-artifact CNN | accuracy / F1, unseen terrain | **99.7% / 0.998** | CPU |
+| **M7** learned heuristic | beats straight-line baseline, ~99% admissible | ✓ | CPU |
+| **M2** surface classifier | per-class IoU | pending (16 GB run) | — |
+
+Each notebook now also prints the **absolute path** of the `*_samples.png` +
+`*_report.json` it writes, so runners can find and return them.
+
 ## Gates (kept from the plan)
 
 A model ships into the product only if it passes its gate (`MARSWALK_CONTEXT.md`

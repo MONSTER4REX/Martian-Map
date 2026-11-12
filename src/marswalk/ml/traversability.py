@@ -110,7 +110,7 @@ def train_pu(X, s, epochs: int = 60, lr: float = 2e-3, device: str = "cpu",
             opt.zero_grad()
             loss = lossf(net(Xt[idx]), st[idx])
             loss.backward(); opt.step()
-            tot += float(loss) * len(idx)
+            tot += loss.item() * len(idx)
         history.append(tot / n)
     net.eval()
     m = TraversabilityModel(x_mean=x_mean, x_std=x_std, state=net.state_dict(), history=history)

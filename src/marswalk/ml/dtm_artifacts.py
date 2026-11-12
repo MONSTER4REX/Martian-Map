@@ -132,7 +132,7 @@ def train_cnn(X, y, epochs: int = 15, lr: float = 1e-3, device: str = "cpu",
             opt.zero_grad()
             loss = lossf(net(Xt[idx]), yt[idx])
             loss.backward(); opt.step()
-            tot += float(loss) * len(idx)
+            tot += loss.item() * len(idx)
         history.append(tot / n)
     net.eval()
     m = ArtifactModel(patch=patch, x_mean=x_mean, x_std=x_std,

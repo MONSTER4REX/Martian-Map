@@ -143,7 +143,7 @@ def train_mlp(X, y, epochs: int = 60, lr: float = 1e-3, device: str = "cpu",
             opt.zero_grad()
             loss = lossf(net(Xt[idx]), yt[idx])
             loss.backward(); opt.step()
-            tot += float(loss) * len(idx)
+            tot += loss.item() * len(idx)
         history.append(tot / n)
     net.eval()
     m = HeuristicModel(mean=mean, std=std, y_mean=y_mean, y_std=y_std,

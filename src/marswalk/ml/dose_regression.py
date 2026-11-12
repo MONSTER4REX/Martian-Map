@@ -97,7 +97,7 @@ def train_mlp(X, y, epochs: int = 200, lr: float = 2e-3, device: str = "cpu",
             opt.zero_grad()
             loss = lossf(net(Xt[idx]), Yt[idx])
             loss.backward(); opt.step()
-            tot += float(loss) * len(idx)
+            tot += loss.item() * len(idx)
         history.append(tot / n)
     net.eval()
     m = DoseModel(x_mean=x_mean, x_std=x_std, ylog_mean=ylog_mean, ylog_std=ylog_std,
