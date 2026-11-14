@@ -9,7 +9,8 @@ Guide: Martian Map" (hackathon Nov 14–15, 2026).
 > explainable reasons, with assumptions and uncertainty shown.
 
 Spec and decisions: [`MARSWALK_CONTEXT.md`](MARSWALK_CONTEXT.md) (source of
-truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md).
+truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md). Full build history and decisions:
+[`docs/HISTORY.md`](docs/HISTORY.md).
 
 ## Status (2026-11-08)
 
