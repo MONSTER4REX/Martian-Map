@@ -139,6 +139,15 @@ def main() -> None:
                   f"(BOULDERING {meta['patch']}, {meta['n_boulders']} boulders, CC BY 4.0). "
                   f"Boulders are real raised relief; metres are a demo scale; "
                   f"life-support PLACEHOLDER."),
+        "ui": {
+            "site": "HiRISE ESP_017355_2260 · ON-FOOT REACHABILITY",
+            "provenance": f"Over <b>real HiRISE boulders</b> ({meta['n_boulders']}, "
+                          f"ESP_017355_2260) · life-support PLACEHOLDER",
+            "honest": (f"Terrain is the <b>real {meta['n_boulders']}-boulder field</b> from "
+                       f"HiRISE ESP_017355_2260 (BOULDERING, CC BY 4.0), modelled as raised "
+                       f"relief; the <b>mechanism</b> is real, life-support numbers are "
+                       f"placeholders. A regional DEM drops in via export_jezero_dem.py."),
+        },
         "source": meta.get("source", ""),
         "patch": meta.get("patch", ""), "body": meta.get("body", ""),
         "n_boulders": meta.get("n_boulders"),
