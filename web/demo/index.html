@@ -101,7 +101,7 @@
 
   <div class="console">
     <div class="mapcard">
-      <div class="mapbar"><span>JEZERO AOI · ON-FOOT REACHABILITY</span><span id="coord">— , —</span></div>
+      <div class="mapbar"><span>HiRISE ESP_017355_2260 · ON-FOOT REACHABILITY</span><span id="coord">— , —</span></div>
       <div class="tabs" role="tablist" id="tabs"></div>
       <div class="mapwrap">
         <canvas id="map" width="600" height="600" role="img" aria-label="interactive survival map"></canvas>
@@ -141,7 +141,7 @@
   </div>
 
   <div class="foot">
-    <span>Precomputed by <b>marswalk.physics.survival</b> · synthetic terrain + PLACEHOLDER life-support</span>
+    <span>Precomputed by <b>marswalk.physics.survival</b> over <b>real HiRISE boulders</b> (ESP_017355_2260) · life-support PLACEHOLDER</span>
     <span><a href="https://github.com/MONSTER4REX/Martian-Map">github.com/MONSTER4REX/Martian-Map</a></span>
   </div>
 </div>
@@ -304,8 +304,9 @@
   });
 
   document.getElementById('honest').innerHTML =
-    'Terrain is synthetic and all life-support numbers are placeholders — the <b>mechanism</b> is real. '+
-    'An owner’s Jezero HiRISE DEM and cited O₂ figures drop straight in and this map becomes a real site.';
+    'Terrain is the <b>real '+ (D.n_boulders||461) +'-boulder field</b> from HiRISE ESP_017355_2260 '+
+    '(BOULDERING, CC BY 4.0), modelled as raised relief; life-support numbers are still placeholders — '+
+    'the <b>mechanism</b> is real. A regional DEM and cited O₂ figures drop straight in.';
 
   render();
 })();
