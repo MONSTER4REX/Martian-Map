@@ -97,6 +97,7 @@ def field_to_json(a: np.ndarray) -> list[list[float | None]]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("-o", "--out", type=Path, default=ROOT / "web" / "demo" / "survival_data.json")
+    ap.add_argument("--js-var", default="SURVIVAL_DATA", help="global the .js wrapper assigns to")
     args = ap.parse_args()
 
     meta = json.loads(FIXTURE.read_text(encoding="utf-8"))
@@ -140,6 +141,7 @@ def main() -> None:
                   f"Boulders are real raised relief; metres are a demo scale; "
                   f"life-support PLACEHOLDER."),
         "ui": {
+            "short": "HiRISE boulders",
             "site": "HiRISE ESP_017355_2260 · ON-FOOT REACHABILITY",
             "provenance": f"Over <b>real HiRISE boulders</b> ({meta['n_boulders']}, "
                           f"ESP_017355_2260) · life-support PLACEHOLDER",
@@ -165,7 +167,7 @@ def main() -> None:
     payload = json.dumps(data, separators=(",", ":"))
     args.out.write_text(payload, encoding="utf-8")
     js_out = args.out.with_suffix(".js")
-    js_out.write_text("window.SURVIVAL_DATA=" + payload + ";\n", encoding="utf-8")
+    js_out.write_text(f"window.{args.js_var}=" + payload + ";\n", encoding="utf-8")
     kb = args.out.stat().st_size / 1024
     n_modelled = int((elev > 0).sum())
     print(f"\nreal boulders: {meta['patch']} ({meta['n_boulders']}) | relief cells "

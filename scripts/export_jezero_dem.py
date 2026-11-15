@@ -66,6 +66,7 @@ def field_to_json(a):
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("-o", "--out", type=Path, default=ROOT / "web" / "demo" / "survival_data.json")
+    ap.add_argument("--js-var", default="SURVIVAL_DATA", help="global the .js wrapper assigns to")
     args = ap.parse_args()
 
     dem = json.loads(FIXTURE.read_text(encoding="utf-8"))
@@ -113,6 +114,7 @@ def main() -> None:
                   f"{dem['source']}, {dem['center']}. Real MOLA elevation at "
                   f"{cellsize:.0f} m/px (regional scale); life-support PLACEHOLDER."),
         "ui": {
+            "short": "MOLA DEM",
             "site": "MOLA · JEZERO CRATER · REGIONAL REACHABILITY",
             "provenance": "Real <b>MOLA topography</b> (MGS MEGDR, 463 m/px) over "
                           "<b>Jezero crater</b> · life-support PLACEHOLDER",
@@ -137,7 +139,7 @@ def main() -> None:
     payload = json.dumps(data, separators=(",", ":"))
     args.out.write_text(payload, encoding="utf-8")
     js_out = args.out.with_suffix(".js")
-    js_out.write_text("window.SURVIVAL_DATA=" + payload + ";\n", encoding="utf-8")
+    js_out.write_text(f"window.{args.js_var}=" + payload + ";\n", encoding="utf-8")
     kb = args.out.stat().st_size / 1024
     print(f"\nreal DEM: {dem['center']} | elev {elev.min():.0f}..{elev.max():.0f} m "
           f"| {nrows}x{ncols} @ {cellsize:.0f} m/px | budget {budget/60:.0f} min")

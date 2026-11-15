@@ -99,6 +99,20 @@
     can an astronaut on foot walk there and still get back to a haven before oxygen runs out? <b>Click</b> to pin a
     destination, then switch the contingency and watch the safe world collapse.</p>
 
+  <style>
+    .dsrow{display:flex;align-items:center;gap:14px;margin:0 0 18px;flex-wrap:wrap}
+    .dslbl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+    .dstoggle{display:inline-flex;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+    .dsbtn{background:var(--panel2);border:0;color:var(--muted);cursor:pointer;font-family:var(--mono);
+      font-size:11.5px;letter-spacing:.07em;padding:9px 16px;transition:background .15s,color .15s}
+    .dsbtn:hover{color:var(--fg)}
+    .dsbtn[aria-selected=true]{background:var(--rust);color:#fff}
+  </style>
+  <div class="dsrow" id="dsrow">
+    <span class="dslbl">Real data source</span>
+    <div class="dstoggle" id="dstoggle" role="tablist"></div>
+  </div>
+
   <div class="console">
     <div class="mapcard">
       <div class="mapbar"><span id="sitelabel">ON-FOOT REACHABILITY</span><span id="coord">— , —</span></div>
@@ -147,20 +161,23 @@
 </div>
 
 <script src="survival_data.js"></script>
+<script src="survival_data_boulders.js"></script>
 <script>
 (function(){
-  var D = window.SURVIVAL_DATA;
-  if(!D){ document.getElementById('vtitle').textContent = 'Data not loaded'; return; }
-  var R = D.nrows, C = D.ncols, S = D.scenarios;
+  // registry of the real-data sources that loaded (DEM primary, boulders optional)
+  var DATASETS = [];
+  if(window.SURVIVAL_DATA) DATASETS.push(window.SURVIVAL_DATA);
+  if(window.SURVIVAL_DATA_BOULDERS) DATASETS.push(window.SURVIVAL_DATA_BOULDERS);
+  if(!DATASETS.length){ document.getElementById('vtitle').textContent = 'Data not loaded'; return; }
+
+  var D, R, C, S, cell, imgd, di = 0;
+  var active = 0, pinned = null;     // pinned = {r,c}
   var cv = document.getElementById('map'), ctx = cv.getContext('2d');
   var PX = cv.width;                 // square canvas; cell = PX/C
-  var cell = PX / C;
-  var active = 0, pinned = null;     // pinned = {r,c}
 
-  // offscreen cell-resolution buffer we scale up
-  var off = document.createElement('canvas'); off.width = C; off.height = R;
+  // offscreen cell-resolution buffer we scale up (sized per dataset)
+  var off = document.createElement('canvas');
   var octx = off.getContext('2d');
-  var imgd = octx.createImageData(C, R);
 
   function lerp(a,b,t){ return a+(b-a)*t; }
   // Mars-tinted hillshade ramp: dark basalt -> ochre
@@ -289,27 +306,61 @@
     render(); if(hover && !(pinned&&pinned.r===hover.r&&pinned.c===hover.c)){
       ctx.save(); ctx.globalAlpha=.8; reticle(hover.r,hover.c); ctx.restore(); } }); }
 
-  // build scenario tabs
-  var tabs=document.getElementById('tabs');
-  S.forEach(function(s,idx){
-    var b=document.createElement('button'); b.className='tab'; b.setAttribute('role','tab');
-    b.setAttribute('aria-selected', idx===0?'true':'false');
-    b.innerHTML = s.label + '<span class="f">'+Math.round(s.survivable_fraction*100)+'%</span>';
-    b.addEventListener('click', function(){
-      active=idx; pinned=pinned; // keep pin
-      [].forEach.call(tabs.children,function(x,j){ x.setAttribute('aria-selected', j===idx?'true':'false'); });
-      render();
+  // build the scenario tabs for the active dataset
+  function buildTabs(){
+    var tabs=document.getElementById('tabs'); tabs.innerHTML='';
+    S.forEach(function(s,idx){
+      var b=document.createElement('button'); b.className='tab'; b.setAttribute('role','tab');
+      b.setAttribute('aria-selected', idx===active?'true':'false');
+      b.innerHTML = s.label + '<span class="f">'+Math.round(s.survivable_fraction*100)+'%</span>';
+      b.addEventListener('click', function(){
+        active=idx;
+        [].forEach.call(tabs.children,function(x,j){ x.setAttribute('aria-selected', j===idx?'true':'false'); });
+        render();
+      });
+      tabs.appendChild(b);
     });
-    tabs.appendChild(b);
-  });
+  }
 
-  var ui = D.ui || {};
-  if(ui.site) document.getElementById('sitelabel').textContent = ui.site;
-  if(ui.provenance) document.getElementById('provenance').innerHTML = ui.provenance;
-  document.getElementById('honest').innerHTML = ui.honest ||
-    'The <b>mechanism</b> is real; life-support numbers are placeholders.';
+  function applyLabels(){
+    var ui = D.ui || {};
+    document.getElementById('sitelabel').textContent = ui.site || 'ON-FOOT REACHABILITY';
+    if(ui.provenance) document.getElementById('provenance').innerHTML = ui.provenance;
+    document.getElementById('honest').innerHTML = ui.honest ||
+      'The <b>mechanism</b> is real; life-support numbers are placeholders.';
+  }
 
-  render();
+  // switch the whole console to dataset idx (terrain, scenarios, labels, verdict)
+  function selectDataset(idx){
+    di=idx; D=DATASETS[idx]; R=D.nrows; C=D.ncols; S=D.scenarios; cell=PX/C;
+    off.width=C; off.height=R; imgd=octx.createImageData(C,R);
+    active=0; pinned=null;
+    document.getElementById('verdict').className='verdict none';
+    document.getElementById('vtitle').textContent='Hover the map';
+    document.getElementById('vmargin').textContent='Pick any point to test a walk-out.';
+    document.getElementById('brk').style.display='none';
+    document.getElementById('coord').textContent='— , —';
+    buildTabs(); applyLabels();
+    var dt=document.getElementById('dstoggle');
+    if(dt)[].forEach.call(dt.children,function(x,j){ x.setAttribute('aria-selected', j===idx?'true':'false'); });
+    render();
+  }
+
+  // data-source toggle (shown only when more than one real dataset loaded)
+  (function buildToggle(){
+    var dt=document.getElementById('dstoggle'), row=document.getElementById('dsrow');
+    if(!dt) return;
+    if(DATASETS.length<2){ if(row) row.style.display='none'; return; }
+    DATASETS.forEach(function(d,idx){
+      var b=document.createElement('button'); b.className='dsbtn'; b.setAttribute('role','tab');
+      b.setAttribute('aria-selected', idx===0?'true':'false');
+      b.textContent=(d.ui&&d.ui.short)||('Dataset '+(idx+1));
+      b.addEventListener('click', function(){ if(di!==idx) selectDataset(idx); });
+      dt.appendChild(b);
+    });
+  })();
+
+  selectDataset(0);
 })();
 </script>
 </body>
