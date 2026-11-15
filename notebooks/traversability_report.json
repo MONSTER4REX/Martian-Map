@@ -1,0 +1,9 @@
+{
+  "n": 9600,
+  "roc_auc": 0.9999978522950844,
+  "n_positive_labeled": 1687,
+  "true_traversable_frac": 0.5865625,
+  "device": "NVIDIA GeForce RTX 5050 Laptop GPU",
+  "epochs": 80,
+  "seconds": 30.5
+}

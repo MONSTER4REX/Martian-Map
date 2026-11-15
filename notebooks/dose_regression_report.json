@@ -1,0 +1,8 @@
+{
+  "n": 1000,
+  "mae_usv": 0.5622288584709167,
+  "median_rel_err": 0.010688165202736855,
+  "device": "NVIDIA GeForce RTX 5050 Laptop GPU",
+  "epochs": 200,
+  "seconds": 22.3
+}

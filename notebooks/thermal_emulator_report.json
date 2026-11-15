@@ -1,0 +1,10 @@
+{
+  "n": 1000,
+  "mae_tmin_k": 0.237809956073761,
+  "mae_tmax_k": 0.26845893263816833,
+  "max_err_k": 1.651580810546875,
+  "device": "NVIDIA GeForce RTX 5050 Laptop GPU",
+  "epochs": 200,
+  "seconds": 18.3,
+  "final_loss": 0.000104
+}

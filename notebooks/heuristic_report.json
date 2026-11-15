@@ -1,0 +1,13 @@
+{
+  "n": 181539,
+  "mae_s": 34.791664123535156,
+  "rmse_s": 48.58794021606445,
+  "admissible_fraction": 0.3875365623915522,
+  "baseline_mae_s": 106.66975402832031,
+  "improvement_vs_baseline": 0.6738375892917299,
+  "device": "NVIDIA GeForce RTX 5050 Laptop GPU",
+  "n_terrains": 120,
+  "epochs": 120,
+  "seconds": 28.6,
+  "final_loss": 0.10734
+}

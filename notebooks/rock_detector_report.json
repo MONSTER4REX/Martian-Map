@@ -1,0 +1,130 @@
+{
+  "model": "M1 BOULDERING Faster R-CNN ResNet50-FPN (torchvision)",
+  "data": "BOULDERING (Prieur et al. 2023, Zenodo 8171052, CC BY 4.0)",
+  "device": "NVIDIA GeForce RTX 5050 Laptop GPU",
+  "config": {
+    "EPOCHS": 12,
+    "BATCH": 4,
+    "GRAD_ACCUM": 1,
+    "LR": 0.005,
+    "MAX_STEPS": 0,
+    "BODY_FILTER": "all"
+  },
+  "train_count": 755,
+  "test_count": 198,
+  "tiles_without_gsd": 953,
+  "epoch_stats": [
+    {
+      "epoch": 1,
+      "loss": 0.9045017738506277,
+      "sec": 90.80797171592712,
+      "steps": 189,
+      "peak_vram_gb": 5.857365504
+    },
+    {
+      "epoch": 2,
+      "loss": 0.6690295342572783,
+      "sec": 161.64388728141785,
+      "steps": 189,
+      "peak_vram_gb": 5.905004032
+    },
+    {
+      "epoch": 3,
+      "loss": 0.6254625083908202,
+      "sec": 104.69551992416382,
+      "steps": 189,
+      "peak_vram_gb": 5.880059904
+    },
+    {
+      "epoch": 4,
+      "loss": 0.606096739097247,
+      "sec": 84.98793768882751,
+      "steps": 189,
+      "peak_vram_gb": 5.898604544
+    },
+    {
+      "epoch": 5,
+      "loss": 0.5773385341362979,
+      "sec": 83.29285883903503,
+      "steps": 189,
+      "peak_vram_gb": 5.891573248
+    },
+    {
+      "epoch": 6,
+      "loss": 0.5543099231032468,
+      "sec": 82.97356462478638,
+      "steps": 189,
+      "peak_vram_gb": 5.87558912
+    },
+    {
+      "epoch": 7,
+      "loss": 0.5445290457792383,
+      "sec": 82.03754734992981,
+      "steps": 189,
+      "peak_vram_gb": 5.857355264
+    },
+    {
+      "epoch": 8,
+      "loss": 0.5215128260078253,
+      "sec": 82.11188006401062,
+      "steps": 189,
+      "peak_vram_gb": 5.85735424
+    },
+    {
+      "epoch": 9,
+      "loss": 0.5130974047634967,
+      "sec": 82.43670773506165,
+      "steps": 189,
+      "peak_vram_gb": 5.857352704
+    },
+    {
+      "epoch": 10,
+      "loss": 0.501535904470575,
+      "sec": 82.28534483909607,
+      "steps": 189,
+      "peak_vram_gb": 5.903724544
+    },
+    {
+      "epoch": 11,
+      "loss": 0.484875592132094,
+      "sec": 82.33181118965149,
+      "steps": 189,
+      "peak_vram_gb": 5.85735168
+    },
+    {
+      "epoch": 12,
+      "loss": 0.48066590466196574,
+      "sec": 82.33681082725525,
+      "steps": 189,
+      "peak_vram_gb": 5.89668608
+    }
+  ],
+  "f1_by_size": {
+    "[0,0.5)m": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "tp": 0.0,
+      "fp": 0.0,
+      "fn": 0.0
+    },
+    "[0.5,1.5)m": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "tp": 0.0,
+      "fp": 0.0,
+      "fn": 0.0
+    },
+    "[1.5,inf)m": {
+      "precision": 0.6309384164222874,
+      "recall": 0.5131170999284522,
+      "f1": 0.5659608049454163,
+      "tp": 4303.0,
+      "fp": 2517.0,
+      "fn": 4083.0
+    }
+  },
+  "gate_f1_1p5m": 0.5659608049454163,
+  "fit_check_only": false
+}

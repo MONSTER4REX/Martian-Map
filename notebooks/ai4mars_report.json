@@ -1,0 +1,51 @@
+{
+  "model": "M2 AI4Mars DeepLabV3-ResNet50 terrain segmentation",
+  "data": "AI4Mars merged v0.6 (Zenodo 15995036, CC BY 4.0), MSL NavCam",
+  "device": "NVIDIA GeForce RTX 5050 Laptop GPU",
+  "config": {
+    "IMG_SIZE": 512,
+    "BATCH": 6,
+    "EPOCHS": 3,
+    "MAX_STEPS": 0,
+    "NUM_WORKERS": 6,
+    "LR": 0.001
+  },
+  "train_count": 16064,
+  "test_count": 322,
+  "test_version": "min1",
+  "epoch_stats": [
+    {
+      "epoch": 1,
+      "loss": 0.33201357451617874,
+      "sec": 3200.870456933975,
+      "steps": 2677,
+      "sec_per_step": 1.1956931105468716,
+      "peak_vram_gb": 4.023072256
+    },
+    {
+      "epoch": 2,
+      "loss": 0.2019473220627695,
+      "sec": 3185.6200790405273,
+      "steps": 2677,
+      "sec_per_step": 1.189996294000944,
+      "peak_vram_gb": 4.022547968
+    },
+    {
+      "epoch": 3,
+      "loss": 0.1679737358961114,
+      "sec": 3184.58726644516,
+      "steps": 2677,
+      "sec_per_step": 1.18961048429031,
+      "peak_vram_gb": 4.022547968
+    }
+  ],
+  "per_class_iou": {
+    "soil": 0.8950455088835698,
+    "bedrock": 0.7902075413247953,
+    "sand": 0.8394758569693289,
+    "big rock": 0.11894107892554913
+  },
+  "miou": 0.6609174965258108,
+  "big_rock_iou": 0.11894107892554913,
+  "fit_check_only": false
+}
