@@ -1,77 +1,80 @@
-# Marswalk Planner
+# 🛰️ Marswalk Planner
 
-Layered, uncertainty-aware **EVA route planning** for a Martian AOI. Our team's
-entry for the **2026 NASA Space Apps Challenge**, "Interplanetary Survival
-Guide: Martian Map" (hackathon Nov 14–15, 2026).
+**Layered, uncertainty-aware EVA route planning for a Martian AOI.**
 
-> **Core claim to prove:** on a real Jezero site, the full mission-constrained
-> route differs from the shortest and slope-only routes for defensible,
-> explainable reasons, with assumptions and uncertainty shown.
+Our team's entry for the **2026 NASA Space Apps Challenge** —
+*"Interplanetary Survival Guide: Martian Map"* (hackathon Nov 14–15, 2026).
 
-Spec and decisions: [`MARSWALK_CONTEXT.md`](MARSWALK_CONTEXT.md) (source of
-truth) and [`ASSUMPTIONS.md`](ASSUMPTIONS.md). Full build history and decisions:
-[`docs/HISTORY.md`](docs/HISTORY.md).
+> **The claim we set out to prove:** on a real Jezero site, the full
+> mission-constrained route differs from the shortest and slope-only routes
+> for *defensible, explainable* reasons — with every assumption and every
+> source of uncertainty shown.
 
-## Status (2026-11-08)
+Marswalk fuses multi-mission Mars data into a co-registered, uncertainty-aware
+site model and plans human EVA / pressurized-rover routes under **hard
+constraints** (walk-back, consumables, slope, hazards) and **soft objectives**
+(time, energy, risk, science value, comms coverage).
 
-| Area | State |
-|---|---|
-| Repo skeleton, CI, licenses | ✅ in place |
-| **P3 planner baseline** (grid, A*, slope, 3-route comparison) | ✅ offline; **UNTESTED ON REAL DATA** |
-| A* validated vs independent oracle (NetworkX) | ✅ randomized suite |
-| **P4 EVA physics** (locomotion, consumables, **walk-back** gate) | ✅ offline, placeholder params; **UNTESTED ON REAL DATA** |
-| **Walk-back wired into planner** (mission constraint, step 4) | ✅ offline; gate satisfied → step 5 unlocked |
-| **Survival envelope** (no-go/death zones; collapses under rover-loss) | ✅ offline; the hero visual ([docs/survival.md](docs/survival.md)) |
-| **Interactive survival console** (click a point → SAFE/FATAL, live) | ✅ offline; the judge-facing demo ([docs/demo.md](docs/demo.md)) |
-| **Step 5: multi-objective NAMOA\*** (Pareto on a corridor) | ✅ offline; exact front, validated vs Dijkstra |
-| **Step 6: time-windowed orienteering** (science under walk-back) | ✅ offline; exact subset DP |
-| **P1 data (offline)** — DEM derivatives, DTM QA (C1), DEM error ensembles (C2) | ✅ offline; network parts pending |
-| **P6 validation** — route metrics, route stability, ablation harness | ✅ offline |
-| **Rock-hazard layer + §3 gate** — detector→planner link, rock-aware routing | ✅ offline; gate demo on **real** Mars boulders ([docs/hazard.md](docs/hazard.md)) |
-| **C8 geometry** — visibility / illumination / comms coverage | ✅ offline; real SPICE pending |
-| **C7/C9 science** — rock size-frequency + value raster | ✅ offline |
-| **P2 ML** — annotation, spatial splits, detection metrics | ✅ offline; training pending (GPU) |
-| **Training notebook** — Faster R-CNN on **real BOULDERING data** (CC BY 4.0) | ✅ verified on real download (CPU); full GPU run owner-side |
-| **AI4Mars notebook** — DeepLabV3 terrain segmentation on **real AI4Mars** (CC BY 4.0) | ✅ verified on real patches (CPU); full GPU run owner-side |
-| **Model roadmap** — restored PRD v0.1 scope (6 trained + 1 optional); run-and-return notebooks | 🔄 M1 **training on the dev GTX 1650** (8-epoch run; 1.91 GB); M3–M7 all built & tested (CPU, notebooks); M2 pending 16 GB download ([docs/models.md](docs/models.md), [notebooks/README.md](notebooks/README.md)) |
-| **P3/P5 API + web** — FastAPI (/routes /probe) + React map | ✅ offline; verified in-browser |
-| **`marswalk` CLI** — end-to-end mission report (3-route + walk-back + stability) | ✅ offline; drives real modules |
-| **Demo figure** — 3-panel render (routes + walk-back field + stability map) | ✅ offline ([docs/cli.md](docs/cli.md)) |
-| **C3/C4/C6 screening** — thermal / radiation / slip (placeholders) | ✅ offline; validate vs MEDA / rover cases |
-| Whole suite | ✅ 208 tests pass (offline) |
-| Remaining | ⏳ real-data / GPU runs on owner machines; model validation |
+---
 
-Nothing network- or GPU-dependent is "done" until an owner runs it on their
-machine and pastes back results (the sandbox has no AWS/PDS/ODE/Zenodo access
-and no GPU).
+## ✨ What it does
 
-### Assumptions baked in (the three blocking questions, defaults taken)
+- **Three routes, one destination.** Shortest (3-D distance), slope-aware, and
+  full mission-constrained — compared on length, time, energy, hazard exposure,
+  walk-back margin, and science value, *with the reason each route is rejected.*
+- **Walk-back as a hard constraint.** At every node and time, time-to-nearest
+  safe haven ≤ remaining consumables − reserve, checked across contingencies
+  (nominal, **rover-loss**, suit degradation).
+- **Survival envelope.** No-go / death zones that collapse under a rover-loss
+  contingency — the hero visual, with an interactive click-a-point console
+  (SAFE / FATAL, live).
+- **Multi-objective planning.** Exact Pareto fronts (NAMOA\*) on a corridor,
+  validated against Dijkstra.
+- **Science under walk-back.** Time-windowed orienteering: maximize science
+  value while preserving return reserves (exact subset DP).
+- **Rock-hazard routing.** A detector → planner link so rock-aware routes avoid
+  rubble fields that slope-only routing would accept.
+- **Route-stability map.** How often the recommendation changes under DEM-error
+  and parameter perturbation — and which assumption drives it.
 
-1. **No pre-existing repo** — this is the starting skeleton.
-2. **Event rules UNCONFIRMED** — pre-event-work and AI-use/disclosure rules not
-   yet checked against the 2026 Participant Terms. Until confirmed, all code is
-   prep, AI authorship is logged in [`AI_LOG.md`](AI_LOG.md), and AI use will be
-   disclosed. (Lead to confirm.)
-3. **AOI = Jezero**, roles/machines per `MARSWALK_CONTEXT.md` §3–4, not yet
-   re-confirmed by a coverage audit.
+---
 
-## Quickstart
+## 🧭 Design principles
+
+1. **Planner first, ML only where it earns its place.** A feature ships only if
+   tests pass *and* an ablation shows it measurably changes route decisions.
+2. **Every layer is declared** `hard exclusion` / `objective cost` /
+   `informational`. **Missing data is *unknown*, never *safe*.**
+3. **Never present an unvalidated risk score as a failure probability.**
+4. **Nothing network- or GPU-dependent is "done"** until an owner runs it on a
+   real machine and reports back. Such code is marked **UNTESTED ON REAL DATA**.
+5. **Never fabricate** data, metrics, citations, or links. The sandbox used to
+   build this has no access to AWS / PDS / ODE / Zenodo and no GPU; the full
+   offline test suite runs on synthetic fixtures.
+
+---
+
+## 🚀 Quickstart
 
 ```bash
 python -m venv .venv && . .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pre-commit install
-pytest            # 208 tests, offline
+pytest          # full offline suite
 ruff check .
 ```
 
-End-to-end mission demo (drives the real pipeline):
+**End-to-end mission report** (drives the real pipeline — three-route
+comparison + walk-back flip across contingencies + route-stability figure):
 
 ```bash
-marswalk mission            # or: PYTHONPATH=src python -m marswalk.cli mission
+marswalk mission                       # default ridge terrain, human-readable
+marswalk mission --json                # machine-readable
+marswalk mission --terrain random --seed 3
+marswalk mission --start 0,0 --goal 39,0 --base 0,0 --rover 39,0
 ```
 
-Three-route demo:
+**Three-route demo in Python:**
 
 ```python
 from marswalk.terrain.synthetic import ridge_world
@@ -85,41 +88,88 @@ print(cmp.summary)
 #    mission route detours around them. Mission route is +37.4% vs shortest.
 ```
 
-## Layout
+**API + web map:**
+
+```bash
+pip install -e ".[api]"
+uvicorn marswalk.api.app:app --reload      # POST /routes, POST /probe, GET /health
+# then open web/index.html (map) or web/demo/index.html (survival console)
+```
+
+---
+
+## 📂 Repository layout
 
 ```
 src/marswalk/
-  planner/      grid, connectivity, slope, cost, astar, layers, routes
+  planner/      grid, connectivity, slope, cost, A*, layers, routes,
+                mission (walk-back), multiobjective (NAMOA*), orienteering, hazard
+  physics/      locomotion, consumables, walk-back, thermal, radiation, slip, survival
+  geometry/     SPICE visibility / illumination / comms coverage
+  science/      rock size-frequency fit, science-value raster
+  data/         DEM derivatives, DTM QA, DEM error model, manifest, I/O
+  ml/           rock detector, traversability, annotation, spatial splits, metrics
+  validation/   route metrics, route stability, ablation harness
   terrain/      synthetic terrain for offline tests/demos
-tests/          grid, slope, routes, A*-vs-NetworkX oracle
-docs/           planner.md (module README)
-data/           gitignored — never commit rasters (DVC / external SSD)
+  api/          FastAPI service (routes, probe) + pydantic schemas
+tests/          grid · slope · routes · A*-vs-NetworkX oracle · mission · more
+web/            React map, survival console, pitch page, OpenAPI
+notebooks/      training notebooks (rock detector, AI4Mars terrain, …) — run owner-side
+docs/           per-module READMEs + HISTORY.md
+scripts/        offline demo/export/figure-render scripts
 ```
 
-Module docs: [`docs/planner.md`](docs/planner.md).
-Data provenance & licenses: [`DATA_LICENSES.md`](DATA_LICENSES.md).
+Module docs live in [`docs/`](docs/) · data provenance & licenses in
+[`DATA_LICENSES.md`](DATA_LICENSES.md) · full spec in
+[`MARSWALK_CONTEXT.md`](MARSWALK_CONTEXT.md) · assumptions in
+[`ASSUMPTIONS.md`](ASSUMPTIONS.md).
 
-## Build order (from the spec)
+---
 
-Planner first, validated at each step, **before** any ML:
-1. ✅ 3-D shortest path (checked vs independent impl)
-2. ✅ slope-aware cost
-3. ✅ hard exclusions (slope, cross-slope, unknown=blocked)
-4. ✅ mission constraints + walk-back (P4) — walk-back is now a hard planner
-   constraint ([docs/physics.md](docs/physics.md), [docs/mission.md](docs/mission.md)).
-   Gate satisfied.
-5. ✅ multi-objective NAMOA* on a corridor ([docs/multiobjective.md](docs/multiobjective.md))
-6. ✅ time-windowed orienteering ([docs/orienteering.md](docs/orienteering.md))
+## 🧱 Build order (planner before ML)
 
-The planner build order (steps 1–6) is complete offline; remaining work is the
-data layer (P1), validation (P6), geometry/science rasters, ML, and the API +
-frontend.
+1. ✅ 3-D shortest path — checked against an independent implementation (NetworkX)
+2. ✅ Slope-aware cost
+3. ✅ Hard exclusions (slope, cross-slope, unknown = blocked)
+4. ✅ Mission constraints + walk-back
+5. ✅ Multi-objective NAMOA\* on a corridor — exact front, validated vs Dijkstra
+6. ✅ Time-windowed orienteering — science under walk-back
 
-ML (rock detector) only after the baseline planner passes and an ablation shows
-it changes route decisions (`MARSWALK_CONTEXT.md` §3 gates).
+ML (rock detector) is gated: it ships only after the baseline planner passes
+and an ablation shows it changes route decisions.
 
-## License
+---
 
-Code: MIT ([`LICENSE`](LICENSE)). Input datasets keep their own terms and are
-not redistributed — see [`DATA_LICENSES.md`](DATA_LICENSES.md) (HRSC is CC BY-SA;
-MCD is non-commercial; AI4Mars license unspecified).
+## 🛰️ Data sources
+
+Marswalk is designed to fuse HiRISE / CTX DTMs, THEMIS thermal inertia, the
+Jezero geologic map, CRISM mineralogy, MEDA/REMS weather, SPICE geometry, and
+Perseverance traverse data. **Input datasets keep their own terms and are not
+redistributed** — see [`DATA_LICENSES.md`](DATA_LICENSES.md) (HRSC is CC BY-SA;
+MCD is non-commercial; some rover-view sets have unspecified licenses). Coarse
+layers (thermal inertia ~100 m, GRS hundreds of km) are **never** presented as
+EVA-scale detail.
+
+---
+
+## ⚠️ Status & honesty notes
+
+- The planner build (steps 1–6), EVA physics, survival envelope, validation
+  harness, API, and web demo all run **offline on synthetic terrain**.
+- All physics / threshold parameters are **placeholders** (see
+  [`ASSUMPTIONS.md`](ASSUMPTIONS.md)) — the CLI demonstrates the *decision
+  machinery*, not calibrated Mars values.
+- Real-data co-registration, SPICE geometry, and model training are run on team
+  machines and reported back; until then they're marked **UNTESTED ON REAL DATA**.
+- AI assistance was used in development and is logged in [`AI_LOG.md`](AI_LOG.md).
+
+---
+
+## 📜 License
+
+**Code: MIT** ([`LICENSE`](LICENSE)). Input datasets are not redistributed and
+retain their original terms — see [`DATA_LICENSES.md`](DATA_LICENSES.md).
+
+---
+
+*Built for the 2026 NASA Space Apps Challenge · "Interplanetary Survival Guide: Martian Map"*
